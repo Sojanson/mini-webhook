@@ -2,15 +2,13 @@
 
 // Imports dependencies and set up http server
 
-
 const
 	fs = require('fs'),
-	https = require('https'),
+	https = require('https'),	
 	express = require('express'),
 	bodyParser = require('body-parser'),
-	app = express().use(bodyParser.json()); // creates express http server 
-
-var options = {};
+	app = express().use(bodyParser.json()), // creates express http server 
+	conf = require('./config.js');
 
 var options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/privkey.pem'),
