@@ -10,7 +10,7 @@ const
 	app = express().use(bodyParser.json()), // creates express http server 
 	conf = require('./config.js');
 
-var options = {
+let options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/privkey.pem'),
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
@@ -26,14 +26,21 @@ app.post('/webhook', (req, res) => {
   // Checks this is an event from a page subscription
   if (body.object === 'page') {
 
+    
+    let entries = body.entry[0].messaging;
     // Iterates over each entry - there may be multiple if batched
-    body.entry.forEach(function(entry) {
+    entries.forEach(function(entry) {
 
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
-      let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
+
+      let sender = entry.sender.id;
+      if(entry.message && entry.message.text) {
+      	let msg_text = entry.message.text;
+      	console.log('usuario: ' + sender + ' envió el mensaje "' + msg_text +'"');
+      }
       
+
     });
 
     // Returns a '200 OK' response to all requests
@@ -49,7 +56,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  var VERIFY_TOKEN = process.env.VERIFY_TOKEN || conf.VERIFY_TOKEN;
+  let VERIFY_TOKEN = process.env.VERIFY_TOKEN || conf.VERIFY_TOKEN;
     
   // Parse the query params
   let mode = req.query['hub.mode'];
