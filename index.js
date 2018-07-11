@@ -12,7 +12,7 @@ const
 
 var options = {};
 
-var options {
+var options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/privkey.pem'),
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
