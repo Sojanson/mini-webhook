@@ -1,13 +1,24 @@
 'use strict';
 
 // Imports dependencies and set up http server
+
+
 const
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  app = express().use(bodyParser.json()); // creates express http server
+	fs = require('fs'),
+	https = require('https'),
+	express = require('express'),
+	bodyParser = require('body-parser'),
+	app = express().use(bodyParser.json()); // creates express http server 
+
+var options = {};
+
+var options {
+	key: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
+};
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
+https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
@@ -62,3 +73,4 @@ app.get('/webhook', (req, res) => {
     }
   }
 });
+
