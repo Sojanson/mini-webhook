@@ -83,11 +83,11 @@ app.get('/webhook', (req, res) => {
 });
 
 function messageHandler(receptor, data, isText) {
-	var payload = {};
+	let payload = {};
 	payload = data;
 
 	if(isText) {
-		switch (toLowerCase(payload)) {
+		switch (toLowerCase(payload['text'])) {
 			case 'matate':
 				throw new Error('Me quieren matar');
 				break;
