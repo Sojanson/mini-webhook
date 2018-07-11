@@ -3,6 +3,7 @@
 // Imports dependencies and set up http server
 
 const
+	request = require('request'),
 	fs = require('fs'),
 	https = require('https'),	
 	express = require('express'),
@@ -38,6 +39,7 @@ app.post('/webhook', (req, res) => {
       if(entry.message && entry.message.text) {
       	let msg_text = entry.message.text;
       	console.log('usuario: ' + sender + ' envió el mensaje "' + msg_text +'"');
+      	messageHandler(sender, msg_text, true);
       }
       
 
@@ -75,8 +77,45 @@ app.get('/webhook', (req, res) => {
     
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
-      res.sendStatus(403);      
+      res.sendStatus(403);
     }
   }
 });
+
+function messageHandler(receptor, data, isText) {
+	var payload = {};
+	payload = data;
+
+	if(isText) {
+		payload = {
+			text: 'tranquilein john wein'
+		}
+	}
+
+	sendMessage(receptor, payload);
+}
+
+function sendMessage(user_psid, response) {
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": response
+	};
+
+	request({
+		"uri": conf.FB_MESSAGE_URL,
+		"method": 'POST',
+		"qs": {
+			"access_token": conf.PAGE_ACCESS_TOKEN
+		},
+		"json": request_body
+	}, (err, res, body) => {
+		if (!err) {
+			console.log('mensaje enviado!');
+		}else {
+			console.error("no se envió el mensaje :c" + err);
+		}
+	});
+}
 
