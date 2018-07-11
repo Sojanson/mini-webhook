@@ -28,11 +28,11 @@ app.post('/webhook', (req, res) => {
 
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
+    	console.log(entry);
 
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
       let webhook_event = entry.messaging[0];
-      console.log(webhook_event);
     });
 
     // Returns a '200 OK' response to all requests
@@ -48,7 +48,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "Marcadepruebanum3002578jejeblabla"
+  var VERIFY_TOKEN = process.env.VERIFY_TOKEN || conf.VERIFY_TOKEN;
     
   // Parse the query params
   let mode = req.query['hub.mode'];
