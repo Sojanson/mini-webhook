@@ -107,7 +107,7 @@ function sendMessage(user_psid, response) {
 		"uri": conf.FB_MESSAGE_URL,
 		"method": 'POST',
 		"qs": {
-			"access_token": conf.PAGE_ACCESS_TOKEN
+			"access_token": conf.PROFILE_TOKEN
 		},
 		"json": request_body
 	}, (err, res, body) => {
