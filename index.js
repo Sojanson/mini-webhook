@@ -87,21 +87,22 @@ function messageHandler(receptor, data, isText) {
 	payload = data;
 
 	if(isText) {
+		
 		switch (toLowerCase(payload['text'])) {
 			case 'matate':
-				throw new Error('Me quieren matar');
+				throw new Error;				
 				break;
 			case 'tengo un problema':
-				payload = {
-					text: 'tranquilein john wein'
-				};
+				text = 'tranquilein john wein';
 				break;				
-			default:
-				payload = {
-					text: 'no te cacho'
-				};
+			default:				
+				text: 'no te cacho'				
 				break;
 		}
+
+		payload = {
+			text: text;
+		};
 		
 	}
 
