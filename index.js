@@ -97,6 +97,7 @@ function messageHandler(receptor, data, isText) {
 				break;				
 			default:				
 				text = 'no te cacho';
+				console.log(data);
 				break;
 		}
 
