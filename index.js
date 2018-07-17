@@ -84,11 +84,11 @@ app.get('/webhook', (req, res) => {
 
 function messageHandler(receptor, data, isText) {
 	let payload = {};
-	let text = 'no te cacho';
+	let text = 'no te cacho';	
 
 	if(isText) {
 		
-		switch (data.toLowerCase) {
+		switch (data.toLowerCase()) {
 			case 'matate':
 				throw new Error("se pudrió todo");		
 				break;
