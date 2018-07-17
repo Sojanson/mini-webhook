@@ -88,7 +88,7 @@ function messageHandler(receptor, data, isText) {
 
 	if(isText) {
 		payload = {
-			text: text;
+			text: data;
 		};
 		
 	}
