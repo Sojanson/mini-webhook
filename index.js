@@ -84,7 +84,7 @@ app.get('/webhook', (req, res) => {
 
 function messageHandler(receptor, data, isText) {
 	let payload = {};
-	let text = '';
+	let text = 'no te cacho';
 
 	if(isText) {
 		
@@ -94,10 +94,6 @@ function messageHandler(receptor, data, isText) {
 				break;
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
-				break;				
-			default:				
-				text = 'no te cacho';
-				console.log(data);
 				break;
 		}
 
