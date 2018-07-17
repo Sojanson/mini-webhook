@@ -88,7 +88,7 @@ function messageHandler(receptor, data, isText) {
 
 	if(isText) {
 		
-		switch (toLowerCase(data)) {
+		switch (data.toLowerCase) {
 			case 'matate':
 				throw new Error("se pudrió todo");		
 				break;
