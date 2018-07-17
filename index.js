@@ -100,7 +100,7 @@ function messageHandler(receptor, data, isText) {
 		}
 
 		payload = {
-			text: text;
+			text: text
 		};
 		
 	}
