@@ -90,10 +90,13 @@ function messageHandler(receptor, data, isText) {
 		
 		switch (data.toLowerCase()) {
 			case 'matate':
-				throw new Error("se pudrió todo");		
+				text = 'matate tú';
 				break;
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
+				break;
+			case 'holi':
+				text = 'holi tenis pololi?'
 				break;
 		}
 
