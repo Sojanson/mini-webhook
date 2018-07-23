@@ -84,11 +84,15 @@ app.get('/webhook', (req, res) => {
 
 function messageHandler(receptor, data, isText) {
 	let payload = {};
-	let text = 'no te cacho';	
+	let text = 'no te cacho';
+	let type = 'text'
 
 	if(isText) {
 		
 		switch (data.toLowerCase()) {
+			case 'hola':
+				text = 'hola';
+				break;
 			case 'matate':
 				text = 'matate tú';
 				break;
@@ -98,6 +102,10 @@ function messageHandler(receptor, data, isText) {
 			case 'holi':
 				text = 'holi tenis pololi?'
 				break;
+			case 'dame notas':
+				text = 'todas las categorias';
+				type = 'noticias';
+				break;
 		}
 
 		payload = {
@@ -106,10 +114,10 @@ function messageHandler(receptor, data, isText) {
 		
 	}
 
-	sendMessage(receptor, payload);
+	sendMessage(receptor, payload, type);
 }
 
-function sendMessage(user_psid, response) {
+function sendMessage(user_psid, response, type) {
 	let request_body = {
 		"recipient": {
 			"id": user_psid
