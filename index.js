@@ -147,7 +147,7 @@ function sendMessage(user_psid, response, type) {
 					}
 				}
 			}
-
+			console.log(message);
 			
 			break;
 	}
