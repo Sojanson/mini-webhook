@@ -12,8 +12,8 @@ const
 	conf = require('./config.js');
 
 let options = {
-	key: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
+	key: fs.readFileSync('/etc/letsencrypt/live/desarrollobbcl.cl/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/desarrollobbcl.cl/fullchain.pem')
 };
 
 // Sets server port and logs message on success
