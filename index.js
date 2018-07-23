@@ -118,11 +118,45 @@ function messageHandler(receptor, data, isText) {
 }
 
 function sendMessage(user_psid, response, type) {
+	let message = '';
+	
+	switch (type) {
+		case 'text':			
+			message = response;
+			break;
+		case 'noticias':
+			message = {
+				"attachment": {
+					"type": "template",
+					"payload": {
+						"template_type": "generic",
+						"elements": [
+							{
+								"title": "BBCL",
+								"image_url": "http://placekitten.com/200/301",
+								"subtitle": response,
+								"default_action": {
+									"type": "web_url",
+									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
+									"messenger_extensions": false,
+									"webview_height_ratio": "tall",
+									"fallback_url": "https://www.biobiochile.cl/"
+								}
+							}
+						]
+					}
+				}
+			}
+
+			
+			break;
+	}
+
 	let request_body = {
 		"recipient": {
 			"id": user_psid
 		},
-		"message": response
+		"message": message
 	};
 
 	request({
