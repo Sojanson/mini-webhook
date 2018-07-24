@@ -3,7 +3,6 @@
 // Imports dependencies and set up http server
 
 const
-	remote = require('remote-json'),
 	request = require('request'),
 	fs = require('fs'),
 	https = require('https'),	
