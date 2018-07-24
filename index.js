@@ -17,12 +17,6 @@ let options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
 
-remote('http://bbcl.qa.biobiochile.cl/lista/messenger-bot-feed/get-notas')
-.get(function (err, res, body) {
-    console.log(res.statusCode); // 200
-    console.log(body); // {"name": "Bob", "key": "value"}
-});
-
 // Sets server port and logs message on success
 https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
 
