@@ -134,7 +134,7 @@ function sendMessage(user_psid, response, type) {
 							{
 								"title": "BBCL",
 								"image_url": "http://placekitten.com/200/301",
-								"subtitle": response,
+								"subtitle": response.text,
 								"default_action": {
 									"type": "web_url",
 									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
