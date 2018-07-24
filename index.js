@@ -35,11 +35,10 @@ app.post('/webhook', (req, res) => {
       // Gets the message. entry.messaging is an array, but 
       // will only ever contain one message, so we get index 0
 
-      let sender = entry.sender.id;
       if(entry.message && entry.message.text) {
-      	let msg_text = entry.message.text;
-      	console.log('usuario: ' + sender + ' envió el mensaje "' + msg_text +'"');
-      	messageHandler(sender, msg_text, true);
+      	messageHandler(entry);
+      } else if (entry.postback) {
+      	postbackHandler(entry);
       }
       
 
@@ -82,14 +81,17 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-function messageHandler(receptor, data, isText) {
-	let payload = {};
+function messageHandler(evento) {
+	let sender = evento.sender.id;
+	let recipient = evento.recipient.id;
+	let message = evento.message.text;
 	let text = 'no te cacho';
-	let type = 'text'
+	let type = 'text';
 
-	if(isText) {
-		
-		switch (data.toLowerCase()) {
+	console.log('El usuario %d envió el mensaje %d a la página %d', sender, message, recipient);
+
+	if (message) {
+		switch (message.toLowerCase()) {
 			case 'hola':
 				text = 'hola';
 				break;
@@ -106,22 +108,46 @@ function messageHandler(receptor, data, isText) {
 				text = 'todas las categorias';
 				type = 'noticias';
 				break;
-		}
-
-		payload = {
-			text: text
-		};
-		
+		}	
 	}
+	
 
-	sendMessage(receptor, payload, type);
+	let payload = {
+		text: text
+	};
+		
+
+	sendTextMessage(sender, payload, type);
 }
 
-function sendMessage(user_psid, response, type) {
+function postbackHandler(evento) {
+	let sender = evento.sender.id;
+	let recipient = evento.recipient.id;
+	let time = evento.timestamp;
+	let payload = evento.postback.payload;
+
+	console.log('Postback recibido de el usuario %d y pagina %d con el payload "%s" a las %d', sender, recipient, payload, time);
+
+	switch (payload) {
+		case 'get_started':
+			sendGetStarted(sender);
+		break;
+		default:
+			sendTextMessage(sender, {"text":"holi"}, "text");
+		break;
+
+	}
+}
+
+function sendGetStarted(user_psid, response) {
+	console.log("holi");
+}
+
+function sendTextMessage(user_psid, response, type) {
 	let message = '';
 	
 	switch (type) {
-		case 'text':			
+		case 'text':
 			message = response;
 		break;
 		case 'noticias':
