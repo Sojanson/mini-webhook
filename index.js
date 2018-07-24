@@ -140,7 +140,6 @@ function sendMessage(user_psid, response, type) {
 									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
 									"messenger_extensions": false,
 									"webview_height_ratio": "tall",
-									"fallback_url": "https://www.biobiochile.cl/"
 								},
 								"buttons": [
 									{
