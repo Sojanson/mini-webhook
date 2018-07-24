@@ -141,14 +141,19 @@ function sendMessage(user_psid, response, type) {
 									"messenger_extensions": false,
 									"webview_height_ratio": "tall",
 									"fallback_url": "https://www.biobiochile.cl/"
-								}
+								},
+								"buttons": [
+									{
+										"type": "web_url",
+										"url": "https://www.biobiochile.cl",
+										"title": "Ver el Sitio"
+									}
+								]
 							}
 						]
 					}
 				}
-			}
-			console.log(message);
-			
+			};			
 			break;
 	}
 
