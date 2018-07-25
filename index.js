@@ -108,16 +108,13 @@ function messageHandler(evento) {
 				text = 'todas las categorias';
 				type = 'noticias';
 				break;
-		}	
+		}
+
+		let payload = {
+			text: text
+		};
+		sendTextMessage(recipient, payload, type);
 	}
-	
-
-	let payload = {
-		text: text
-	};
-		
-
-	sendTextMessage(recipient, payload, type);
 }
 
 function postbackHandler(evento) {
