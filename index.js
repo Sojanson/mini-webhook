@@ -88,7 +88,7 @@ function messageHandler(evento) {
 	let text = '';
 	let type = 'text';
 
-	console.log('El usuario %d envió el mensaje %d a la página %d', sender, message, recipient);
+	console.log('El usuario %d envió el mensaje %s a la página %d', sender, message, recipient);
 
 	if (message) {		
 		switch (message.toLowerCase()) {
