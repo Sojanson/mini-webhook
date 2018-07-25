@@ -131,7 +131,7 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			sendGetStarted(sender, "Bienvenido {{user_first_name}}! ¿Quieres recibir suscribirte para recibir noticias?");
+			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
 		break;
 		case 'group-nacional':
 			console.log('se seleccionó categoria nacional');
@@ -154,17 +154,17 @@ function sendGetStarted(user_psid, response) {
 				"text": response,
 				"buttons": [{
 					"type": "postback",
-					"title": "¿Recibir Noticias a Diario?",
+					"title": "Recibir a diario",
 					"payload": "daily"
 				},
 				{
 					"type": "postback",
-					"title": "Recibir Noticias al momento que son publicadas",
+					"title": "Recibir al publicar ",
 					"payload": "realtime"
 				},
 				{
 					"type": "postback",
-					"title": "No recibir noticias",
+					"title": "No recibir",
 					"payload": "nope"
 				}]
 			}
