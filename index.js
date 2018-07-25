@@ -117,7 +117,7 @@ function messageHandler(evento) {
 			"text": text,
 			"metadata": "BBCL_METADATA"
 		};
-		sendTextMessage(recipient, payload, type);
+		sendTextMessage(sender, payload, type);
 	}
 }
 
