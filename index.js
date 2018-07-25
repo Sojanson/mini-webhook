@@ -94,30 +94,30 @@ function messageHandler(evento) {
 		switch (message.toLowerCase()) {
 			case 'hola':
 				text = 'hola';
+				sendTextMessage(sender, text, type);
 			break;
 			case 'matate':
 				text = 'matate tú';
+				sendTextMessage(sender, text, type);
 			break;
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
+				sendTextMessage(sender, text, type);
 			break;
 			case 'holi':
 				text = 'holi tenis pololi?';
+				sendTextMessage(sender, text, type);
 			break;
 			case 'no te cacho':
 				text = 'ta mala esta wea';
+				sendTextMessage(sender, text, type);
 			break;
 			case 'dame notas':
 				text = 'todas las categorias';
 				type = 'noticias';
+				sendTextMessage(sender, text, type);
 			break;
-		}
-
-		let payload = {
-			"text": text,
-			"metadata": "BBCL_METADATA"
-		};
-		sendTextMessage(sender, payload, type);
+		}		
 	}
 }
 
@@ -185,7 +185,10 @@ function sendTextMessage(user_psid, response, type) {
 	
 	switch (type) {
 		case 'text':
-			message = response;
+			message = {
+				"text": response,
+				"metadata": "BBCL_METADATA"
+			};
 		break;
 		case 'noticias':
 			message = {
