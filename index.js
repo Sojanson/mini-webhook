@@ -95,28 +95,28 @@ function messageHandler(evento) {
 			case 'hola':
 				text = 'hola';
 				sendTextMessage(sender, text, type);
-			break;
+				break;
 			case 'matate':
 				text = 'matate tú';
 				sendTextMessage(sender, text, type);
-			break;
+				break;
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
 				sendTextMessage(sender, text, type);
-			break;
+				break;
 			case 'holi':
 				text = 'holi tenis pololi?';
 				sendTextMessage(sender, text, type);
-			break;
+				break;
 			case 'no te cacho':
 				text = 'ta mala esta wea';
 				sendTextMessage(sender, text, type);
-			break;
+				break;
 			case 'dame notas':
 				text = 'todas las categorias';
 				type = 'noticias';
 				sendTextMessage(sender, text, type);
-			break;
+				break;
 		}		
 	}
 }
@@ -132,13 +132,14 @@ function postbackHandler(evento) {
 	switch (payload) {
 		case 'get_started':
 			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
-		break;
+			break;
 		case 'daily':
 		case 'realtime':
 			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
+			break;
 		case 'group-nacional':
 			console.log('se seleccionó categoria nacional');
-		break;
+			break;
 		default:
 			sendTextMessage(sender, "holanda", "text");
 		break;
