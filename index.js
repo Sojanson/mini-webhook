@@ -152,7 +152,7 @@ function sendCategoriasMessage(user_psid, response) {
 
 	cats = [
 		{
-			[{
+			"cats": [{
 				"type": "postback",
 				"title": "Nacional",
 				"payload": "group-nacional"
@@ -169,7 +169,7 @@ function sendCategoriasMessage(user_psid, response) {
 			}]
 		},
 		{
-			[{
+			"cats": [{
 				"type": "postback",
 				"title": "Deportes",
 				"payload": "group-deportes"
@@ -186,7 +186,7 @@ function sendCategoriasMessage(user_psid, response) {
 			}]
 		},
 		{
-			[{
+			"cats": [{
 				"type": "postback",
 				"title": "Artes y Cultura",
 				"payload": "group-artes-y-cultura"
