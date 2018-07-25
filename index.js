@@ -131,13 +131,13 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			sendGetStarted(sender, {"text": "Bienvenido {{user_first_name}}! ¿Quieres recibir suscribirte para recibir noticias?"});
+			sendGetStarted(sender, "Bienvenido {{user_first_name}}! ¿Quieres recibir suscribirte para recibir noticias?");
 		break;
 		case 'group-nacional':
 			console.log('se seleccionó categoria nacional');
 		break;
 		default:
-			sendTextMessage(sender, {"text": "holanda","metadata": "BBCL_METADATA"}, "text");
+			sendTextMessage(sender, "holanda", "text");
 		break;
 
 	}
