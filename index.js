@@ -130,17 +130,53 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			sendGetStarted(sender);
+			sendGetStarted(sender, {"text": "Bienvenido {{user_first_name}}! ¿Quieres recibir suscribirte para recibir noticias?"});
+		break;
+		case '':
+
 		break;
 		default:
-			sendTextMessage(sender, {"text":"holi"}, "text");
+			sendTextMessage(sender, {"text": "holi"}, "text");
 		break;
 
 	}
 }
 
 function sendGetStarted(user_psid, response) {
-	console.log("holi");
+	let message = '';
+		
+	message = {
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": response.text,
+				"buttons": [{
+					"type": "postback",
+					"title": "¿Recibir Noticias a Diario?",
+					"payload": "daily"
+				},
+				{
+					"type": "postback",
+					"title": "Recibir Noticias al momento que son publicadas",
+					"payload": "realtime"
+				},
+				{
+					"type": "postback",
+					"title": "No recibir noticias",
+					"payload": "nope"
+				}]
+			}
+		}
+	};
+
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+	callSendApi(request_body);
 }
 
 function sendTextMessage(user_psid, response, type) {
@@ -181,20 +217,31 @@ function sendTextMessage(user_psid, response, type) {
 		},
 		"message": message
 	};
+	callSendApi(request_body);
+	
+}
 
+function callSendApi(data) {
+	console.log(data);
 	request({
 		"uri": conf.FB_MESSAGE_URL,
 		"method": 'POST',
 		"qs": {
 			"access_token": conf.PROFILE_TOKEN
 		},
-		"json": request_body
+		"json": data
 	}, (err, res, body) => {
-		if (!err) {
-			console.log('mensaje enviado!');
+		if (!err && res.statusCode == 200) {
+			let recipientId = body.recipient_id;
+			let messageId = body.message_id;
+
+			if (messageId) {
+				console.log("Se envió exitosamente el mensaje con el id %s al receptor %s", messageId, recipientId);
+			}else {
+                console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
+            }			
 		}else {
-			console.error("no se envió el mensaje :c" + err);
+			console.error("No se estableció la comunicación", response.statusCode, response.statusMessage, body.error);
 		}
 	});
 }
-
