@@ -204,6 +204,14 @@ function sendCategoriasMessage(user_psid, response) {
 			}
 		}
 	}
+	
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+	callSendApi(request_body);
 }
 
 function sendGetStarted(user_psid, response) {
