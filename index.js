@@ -133,6 +133,9 @@ function postbackHandler(evento) {
 		case 'get_started':
 			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
 		break;
+		case 'daily':
+		case 'realtime':
+			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 		case 'group-nacional':
 			console.log('se seleccionó categoria nacional');
 		break;
@@ -140,6 +143,65 @@ function postbackHandler(evento) {
 			sendTextMessage(sender, "holanda", "text");
 		break;
 
+	}
+}
+
+function sendCategoriasMessage(user_psid, response) {
+	let message = '';
+
+	message = {
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "button",
+				"text": response,
+				"buttons": [{
+					"type": "postback",
+					"title": "Nacional",
+					"payload": "group-nacional"
+				},
+				{
+					"type": "postback",
+					"title": "Internacional",
+					"payload": "group-nacional"
+				},
+				{
+					"type": "postback",
+					"title": "Economía",
+					"payload": "group-economia"
+				},
+				{
+					"type": "postback",
+					"title": "Deportes",
+					"payload": "group-deportes"
+				},
+				{
+					"type": "postback",
+					"title": "Ciencia y Tecnología",
+					"payload": "group-ciencia-y-tecnologia"
+				},
+				{
+					"type": "postback",
+					"title": "Sociedad",
+					"payload": "group-sociedad"
+				},
+				{
+					"type": "postback",
+					"title": "Artes y Cultura",
+					"payload": "group-artes-y-cultura"
+				},
+				{
+					"type": "postback",
+					"title": "Espectáculos y TV",
+					"payload": "group-espectaculos-y-tv"
+				},
+				{
+					"type": "postback",
+					"title": "Vida Actual",
+					"payload": "group-vida"
+				}]
+			}
+		}
 	}
 }
 
@@ -211,7 +273,7 @@ function sendTextMessage(user_psid, response, type) {
 						]
 					}
 				}
-			};			
+			};
 		break;
 	}
 
