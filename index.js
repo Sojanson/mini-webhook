@@ -204,13 +204,26 @@ function sendCategoriasMessage(user_psid, response) {
 		}
 	];
 
+	textMessage = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": {
+			"text": response,
+			"metadata": "BBCL_METADATA"
+		}
+	};
+
+	callSendApi(textMessage);
+
+
 	cats.forEach(function(grupo){
 		message = {
 			"attachment": {
 				"type": "template",
 				"payload": {
 					"template_type": "button",
-					"text": response,
+					"text": "Categorias",
 					"buttons": grupo.cats
 				}
 			}
