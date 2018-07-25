@@ -151,7 +151,7 @@ function sendGetStarted(user_psid, response) {
 			"type": "template",
 			"payload": {
 				"template_type": "button",
-				"text": response.text,
+				"text": response,
 				"buttons": [{
 					"type": "postback",
 					"title": "¿Recibir Noticias a Diario?",
