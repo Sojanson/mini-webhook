@@ -90,7 +90,7 @@ function messageHandler(evento) {
 
 	console.log('El usuario %d envió el mensaje %d a la página %d', sender, message, recipient);
 
-	if (message) {
+	if (message) {		
 		switch (message.toLowerCase()) {
 			case 'hola':
 				text = 'hola';
@@ -117,7 +117,7 @@ function messageHandler(evento) {
 	};
 		
 
-	sendTextMessage(sender, payload, type);
+	sendTextMessage(recipient, payload, type);
 }
 
 function postbackHandler(evento) {
@@ -132,11 +132,11 @@ function postbackHandler(evento) {
 		case 'get_started':
 			sendGetStarted(sender, {"text": "Bienvenido {{user_first_name}}! ¿Quieres recibir suscribirte para recibir noticias?"});
 		break;
-		case '':
-
+		case 'group-nacional':
+			console.log('se seleccionó categoria nacional');
 		break;
 		default:
-			sendTextMessage(sender, {"text": "holi"}, "text");
+			sendTextMessage(sender, {"text": "holanda"}, "text");
 		break;
 
 	}
@@ -218,7 +218,6 @@ function sendTextMessage(user_psid, response, type) {
 		"message": message
 	};
 	callSendApi(request_body);
-	
 }
 
 function callSendApi(data) {
