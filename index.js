@@ -150,7 +150,7 @@ function postbackHandler(evento) {
 function sendCategoriasMessage(user_psid, response) {
 	let message = '';
 
-	cats = [
+	let cats = [
 		{
 			"cats": [{
 				"type": "postback",
@@ -211,7 +211,7 @@ function sendCategoriasMessage(user_psid, response) {
 				"payload": {
 					"template_type": "button",
 					"text": response,
-					"buttons": grupo
+					"buttons": grupo.cats
 				}
 			}
 		};
