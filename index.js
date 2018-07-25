@@ -85,7 +85,7 @@ function messageHandler(evento) {
 	let sender = evento.sender.id;
 	let recipient = evento.recipient.id;
 	let message = evento.message.text;
-	let text = 'no te cacho';
+	let text = '';
 	let type = 'text';
 
 	console.log('El usuario %d envió el mensaje %d a la página %d', sender, message, recipient);
@@ -94,24 +94,28 @@ function messageHandler(evento) {
 		switch (message.toLowerCase()) {
 			case 'hola':
 				text = 'hola';
-				break;
+			break;
 			case 'matate':
 				text = 'matate tú';
-				break;
+			break;
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
-				break;
+			break;
 			case 'holi':
-				text = 'holi tenis pololi?'
-				break;
+				text = 'holi tenis pololi?';
+			break;
+			case 'no te cacho':
+				text = 'ta mala esta wea';
+			break;
 			case 'dame notas':
 				text = 'todas las categorias';
 				type = 'noticias';
-				break;
+			break;
 		}
 
 		let payload = {
-			text: text
+			"text": text,
+			"metadata": "BBCL_METADATA"
 		};
 		sendTextMessage(recipient, payload, type);
 	}
@@ -133,7 +137,7 @@ function postbackHandler(evento) {
 			console.log('se seleccionó categoria nacional');
 		break;
 		default:
-			sendTextMessage(sender, {"text": "holanda"}, "text");
+			sendTextMessage(sender, {"text": "holanda","metadata": "BBCL_METADATA"}, "text");
 		break;
 
 	}
