@@ -140,8 +140,33 @@ function postbackHandler(evento) {
 		case 'group-nacional':
 			console.log('se seleccionó categoria nacional');
 			break;
+		case 'group-internacional':
+			console.log('se seleccionó categoria internacional');
+			break;
+		case 'group-economia':
+			console.log('se seleccionó categoria economia');
+			break;
+		case 'group-deportes':
+			console.log('se seleccionó categoria deportes');
+			break;
+		case 'group-ciencia-y-tecnologia':
+			console.log('se seleccionó categoria ciencia y tecnologia');
+			break;
+		case 'group-sociedad':
+			console.log('se seleccionó categoria sociedad');
+			break;
+		case 'group-artes-y-cultura':
+			console.log('se seleccionó categoria artes y cultura');
+			break;
+		case 'group-espectaculos-y-tv':
+			console.log('se seleccionó categoria espectáculos y tv');
+			break;
+		case 'group-vida':
+			console.log('se seleccionó categoria vida actual');
+			break;
+
 		default:
-			sendTextMessage(sender, "holanda", "text");
+			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!! ", "text");
 		break;
 
 	}
@@ -154,18 +179,18 @@ function sendCategoriasMessage(user_psid, response) {
 		{
 			"cats": [{
 				"type": "postback",
-				"title": "Artes y Cultura",
-				"payload": "group-artes-y-cultura"
+				"title": "Nacional",
+				"payload": "group-nacional"
 			},
 			{
 				"type": "postback",
-				"title": "Espectáculos y TV",
-				"payload": "group-espectaculos-y-tv"
+				"title": "Internacional",
+				"payload": "group-internacional"
 			},
 			{
 				"type": "postback",
-				"title": "Vida Actual",
-				"payload": "group-vida"
+				"title": "Economía",
+				"payload": "group-economia"
 			}]
 		},
 		{
@@ -188,20 +213,20 @@ function sendCategoriasMessage(user_psid, response) {
 		{
 			"cats": [{
 				"type": "postback",
-				"title": "Nacional",
-				"payload": "group-nacional"
+				"title": "Artes y Cultura",
+				"payload": "group-artes-y-cultura"
 			},
 			{
 				"type": "postback",
-				"title": "Internacional",
-				"payload": "group-nacional"
+				"title": "Espectáculos y TV",
+				"payload": "group-espectaculos-y-tv"
 			},
 			{
 				"type": "postback",
-				"title": "Economía",
-				"payload": "group-economia"
+				"title": "Vida Actual",
+				"payload": "group-vida"
 			}]
-		}		
+		}
 	];
 
 	cats.forEach(function(grupo){
