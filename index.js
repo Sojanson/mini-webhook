@@ -154,18 +154,18 @@ function sendCategoriasMessage(user_psid, response) {
 		{
 			"cats": [{
 				"type": "postback",
-				"title": "Nacional",
-				"payload": "group-nacional"
+				"title": "Artes y Cultura",
+				"payload": "group-artes-y-cultura"
 			},
 			{
 				"type": "postback",
-				"title": "Internacional",
-				"payload": "group-nacional"
+				"title": "Espectáculos y TV",
+				"payload": "group-espectaculos-y-tv"
 			},
 			{
 				"type": "postback",
-				"title": "Economía",
-				"payload": "group-economia"
+				"title": "Vida Actual",
+				"payload": "group-vida"
 			}]
 		},
 		{
@@ -188,34 +188,21 @@ function sendCategoriasMessage(user_psid, response) {
 		{
 			"cats": [{
 				"type": "postback",
-				"title": "Artes y Cultura",
-				"payload": "group-artes-y-cultura"
+				"title": "Nacional",
+				"payload": "group-nacional"
 			},
 			{
 				"type": "postback",
-				"title": "Espectáculos y TV",
-				"payload": "group-espectaculos-y-tv"
+				"title": "Internacional",
+				"payload": "group-nacional"
 			},
 			{
 				"type": "postback",
-				"title": "Vida Actual",
-				"payload": "group-vida"
+				"title": "Economía",
+				"payload": "group-economia"
 			}]
-		}
+		}		
 	];
-
-	let textMessage = {
-		"recipient": {
-			"id": user_psid
-		},
-		"message": {
-			"text": response,
-			"metadata": "BBCL_METADATA"
-		}
-	};
-
-	callSendApi(textMessage);
-
 
 	cats.forEach(function(grupo){
 		message = {
@@ -238,6 +225,18 @@ function sendCategoriasMessage(user_psid, response) {
 
 		callSendApi(request_body);
 	});
+
+	let textMessage = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": {
+			"text": response,
+			"metadata": "BBCL_METADATA"
+		}
+	};
+
+	callSendApi(textMessage);
 }
 
 function sendGetStarted(user_psid, response) {
