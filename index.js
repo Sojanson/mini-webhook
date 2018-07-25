@@ -204,7 +204,7 @@ function sendCategoriasMessage(user_psid, response) {
 		}
 	];
 
-	textMessage = {
+	let textMessage = {
 		"recipient": {
 			"id": user_psid
 		},
