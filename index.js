@@ -150,68 +150,75 @@ function postbackHandler(evento) {
 function sendCategoriasMessage(user_psid, response) {
 	let message = '';
 
-	message = {
-		"attachment": {
-			"type": "template",
-			"payload": {
-				"template_type": "button",
-				"text": response,
-				"buttons": [{
-					"type": "postback",
-					"title": "Nacional",
-					"payload": "group-nacional"
-				},
-				{
-					"type": "postback",
-					"title": "Internacional",
-					"payload": "group-nacional"
-				},
-				{
-					"type": "postback",
-					"title": "Economía",
-					"payload": "group-economia"
-				},
-				{
-					"type": "postback",
-					"title": "Deportes",
-					"payload": "group-deportes"
-				},
-				{
-					"type": "postback",
-					"title": "Ciencia y Tecnología",
-					"payload": "group-ciencia-y-tecnologia"
-				},
-				{
-					"type": "postback",
-					"title": "Sociedad",
-					"payload": "group-sociedad"
-				},
-				{
-					"type": "postback",
-					"title": "Artes y Cultura",
-					"payload": "group-artes-y-cultura"
-				},
-				{
-					"type": "postback",
-					"title": "Espectáculos y TV",
-					"payload": "group-espectaculos-y-tv"
-				},
-				{
-					"type": "postback",
-					"title": "Vida Actual",
-					"payload": "group-vida"
-				}]
-			}
-		}
-	}
-	
-	let request_body = {
-		"recipient": {
-			"id": user_psid
+	cats = [
+		"cats1": [{
+			"type": "postback",
+			"title": "Nacional",
+			"payload": "group-nacional"
 		},
-		"message": message
-	};
-	callSendApi(request_body);
+		{
+			"type": "postback",
+			"title": "Internacional",
+			"payload": "group-nacional"
+		},
+		{
+			"type": "postback",
+			"title": "Economía",
+			"payload": "group-economia"
+		}],
+		"cats2": [{
+			"type": "postback",
+			"title": "Deportes",
+			"payload": "group-deportes"
+		},
+		{
+			"type": "postback",
+			"title": "Ciencia y Tecnología",
+			"payload": "group-ciencia-y-tecnologia"
+		},
+		{
+			"type": "postback",
+			"title": "Sociedad",
+			"payload": "group-sociedad"
+		}],
+		"cats3": [{
+			"type": "postback",
+			"title": "Artes y Cultura",
+			"payload": "group-artes-y-cultura"
+		},
+		{
+			"type": "postback",
+			"title": "Espectáculos y TV",
+			"payload": "group-espectaculos-y-tv"
+		},
+		{
+			"type": "postback",
+			"title": "Vida Actual",
+			"payload": "group-vida"
+		}]
+	];
+
+	cats.forEach(function(grupo){
+		message = {
+			"attachment": {
+				"type": "template",
+				"payload": {
+					"template_type": "button",
+					"text": response,
+					"buttons": grupo
+				}
+			}
+		};
+
+		let request_body = {
+			"recipient": {
+				"id": user_psid
+			},
+			"message": message
+		};
+
+		callSendApi(request_body);
+	});
 }
 
 function sendGetStarted(user_psid, response) {
