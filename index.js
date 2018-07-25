@@ -241,7 +241,7 @@ function callSendApi(data) {
                 console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
             }			
 		}else {
-			console.error("No se estableció la comunicación", response.statusCode, response.statusMessage, body.error);
+			console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 		}
 	});
 }
