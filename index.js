@@ -39,8 +39,7 @@ app.post('/webhook', (req, res) => {
       	messageHandler(entry);
       } else if (entry.postback) {
       	postbackHandler(entry);
-      }
-      
+      }      
 
     });
 
@@ -132,8 +131,12 @@ function postbackHandler(evento) {
 	switch (payload) {
 		case 'get_started':
 			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
+			
 			break;
 		case 'daily':
+			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
+			subscribeUser(sender, payload);
+			break;
 		case 'realtime':
 			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 			break;
@@ -368,4 +371,22 @@ function callSendApi(data) {
 			console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 		}
 	});
+}
+
+function subscribeUser(user_psid, suscripcion) {
+
+	
+}
+
+function getUserData(user_psid) {
+	
+	request({
+		"uri": "https://graph.facebook.com/",
+		"method": "GET",
+		"qs": {
+			"fields": "first_name,last_name,profile_pic",
+			"access_token": conf.PROFILE_TOKEN
+		}
+
+	})	
 }
