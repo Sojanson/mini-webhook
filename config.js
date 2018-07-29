@@ -1,4 +1,4 @@
-let mysql = require('mysql');
+/*let mysql = require('mysql');
 let con = mysql.createConnection({
 	host : "localhost",
 	user : "fbBot",
@@ -7,7 +7,7 @@ let con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
-});
+});*/
 
 let conf = module.exports = {
     FB_MESSAGE_URL: 'https://graph.facebook.com/v2.6/me/messages',

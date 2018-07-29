@@ -238,7 +238,7 @@ function sendCategoriasMessage(user_psid, response) {
 				"type": "template",
 				"payload": {
 					"template_type": "button",
-					"text": "Categorias",
+					"text": "",
 					"buttons": grupo.cats
 				}
 			}
@@ -381,12 +381,18 @@ function subscribeUser(user_psid, suscripcion) {
 function getUserData(user_psid) {
 	
 	request({
-		"uri": "https://graph.facebook.com/",
+		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
 		"qs": {
 			"fields": "first_name,last_name,profile_pic",
 			"access_token": conf.PROFILE_TOKEN
 		}
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {
 
-	})	
+			console.log(res)
+		}else {
+			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
+		}
+	});
 }
