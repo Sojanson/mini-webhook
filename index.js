@@ -16,6 +16,11 @@ let options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
 
+conf.MYSQL.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
 // Sets server port and logs message on success
 https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
 
@@ -375,7 +380,6 @@ function callSendApi(data) {
 }
 
 function subscribeUser(user_psid, suscripcion) {
-
 	
 }
 
@@ -390,7 +394,6 @@ function getUserData(user_psid) {
 		}
 	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
-
 			console.log(body);
 		}else {
 			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
