@@ -239,7 +239,7 @@ function sendCategoriasMessage(user_psid, response) {
 				"type": "template",
 				"payload": {
 					"template_type": "button",
-					"text": "",
+					"text": "...",
 					"buttons": grupo.cats
 				}
 			}
@@ -391,7 +391,7 @@ function getUserData(user_psid) {
 	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
 
-			console.log(res)
+			console.log(body);
 		}else {
 			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
 		}
