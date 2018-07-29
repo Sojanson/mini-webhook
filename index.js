@@ -131,6 +131,7 @@ function postbackHandler(evento) {
 	switch (payload) {
 		case 'get_started':
 			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
+			getUserData(sender);
 			
 			break;
 		case 'daily':
