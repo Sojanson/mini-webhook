@@ -138,6 +138,7 @@ function postbackHandler(evento) {
 			break;
 		case 'realtime':
 			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
+			subscribeUser(sender, payload);
 			break;
 		case 'group-nacional':
 			console.log('se seleccionó categoria nacional');
