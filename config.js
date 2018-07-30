@@ -1,8 +1,10 @@
 let mysql = require('mysql');
+
 let con = mysql.createConnection({
 	host : "localhost",
 	user : "fbBot",
-	password : "54321fbBot"
+	password : "54321fbBot",
+	database: "messenger-bot-db"
 });
 
 let conf = module.exports = {
