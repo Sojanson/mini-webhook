@@ -201,8 +201,8 @@ function callSendApi(data) {
 
 function subscribeUser(user_psid, suscripcion) {
 	let user = getUserData(user_psid);
-	let name = user.first_name ? : '';
-	let last_name = user.last_name ? : '';
+	let name = user.first_name ? user.first_name : '';
+	let last_name = user.last_name ? user.last_name : '';
 
 	conf.MYSQL.connect(function(err) {
 		if (err) throw err;
