@@ -5,7 +5,7 @@
 const
 	request = require('request'),
 	fs = require('fs'),
-	https = require('https'),	
+	https = require('https'),
 	express = require('express'),
 	bodyParser = require('body-parser'),
 	app = express().use(bodyParser.json()), // creates express http server 
@@ -16,16 +16,11 @@ let options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
 
-conf.MYSQL.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
-
 // Sets server port and logs message on success
 https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
 
 // Creates the endpoint for our webhook 
-app.post('/webhook', (req, res) => {  
+app.post('/webhook', (req, res) => {
  
   let body = req.body;
 
@@ -44,7 +39,7 @@ app.post('/webhook', (req, res) => {
       	messageHandler(entry);
       } else if (entry.postback) {
       	postbackHandler(entry);
-      }      
+      }
 
     });
 
@@ -67,16 +62,16 @@ app.get('/webhook', (req, res) => {
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
   let challenge = req.query['hub.challenge'];
-    
+
   // Checks if a token and mode is in the query string of the request
   if (mode && token) {
   
     // Checks the mode and token sent is correct
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-      
+
       // Responds with the challenge token from the request
-      console.log('WEBHOOK_VERIFIED');
-      res.status(200).send(challenge);
+    	console.log('WEBHOOK_VERIFIED');
+    	res.status(200).send(challenge);
     
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
@@ -135,9 +130,7 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
-			getUserData(sender);
-			
+			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");			
 			break;
 		case 'daily':
 			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
@@ -179,6 +172,113 @@ function postbackHandler(evento) {
 		break;
 
 	}
+}
+
+function callSendApi(data) {
+	console.log(data);
+	request({
+		"uri": conf.FB_MESSAGE_URL,
+		"method": 'POST',
+		"qs": {
+			"access_token": conf.PROFILE_TOKEN
+		},
+		"json": data
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {
+			let recipientId = body.recipient_id;
+			let messageId = body.message_id;
+
+			if (messageId) {
+				console.log("Se envió exitosamente el mensaje con el id %s al receptor %s", messageId, recipientId);
+			}else {
+                console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
+            }			
+		}else {
+			console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
+		}
+	});
+}
+
+function subscribeUser(user_psid, suscripcion) {
+	let user = getUserData(user_psid);
+	let name = user.first_name ? : '';
+	let last_name = user.last_name ? : '';
+
+	conf.MYSQL.connect(function(err) {
+		if (err) throw err;
+		console.log("Connected!");
+		let sql = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( ${user_psid}, '${name}', '${last_name}', '${suscripcion}')`;
+
+		conf.MYSQL.query(sql, function (err, result){
+			if (err) throw err;
+			console.log('1 fila insertada');
+		});
+	});
+}
+
+function getUserData(user_psid) {
+	
+	request({
+		"uri": "https://graph.facebook.com/" + user_psid,
+		"method": "GET",
+		"qs": {
+			"fields": "first_name,last_name,profile_pic",
+			"access_token": conf.PROFILE_TOKEN
+		}
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {
+			return body;
+		}else {
+			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
+			return false;
+		}
+	});
+
+	return false;
+}
+
+function sendTextMessage(user_psid, response, type) {
+	let message = '';
+	
+	switch (type) {
+		case 'text':
+			message = {
+				"text": response,
+				"metadata": "BBCL_METADATA"
+			};
+		break;
+		case 'noticias':
+			message = {
+				"attachment": {
+					"type": "template",
+					"payload": {
+						"template_type": "generic",
+						"elements": [
+							{
+								"title": "BBCL",
+								"image_url": "https://media.biobiochile.cl/wp-content/uploads/2018/03/lanlan731.png",
+								"subtitle": response.text,
+								"default_action": {
+									"type": "web_url",
+									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
+									"messenger_extensions": false,
+									"webview_height_ratio": "tall"
+								}
+							}
+						]
+					}
+				}
+			};
+		break;
+	}
+
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+	callSendApi(request_body);
 }
 
 function sendCategoriasMessage(user_psid, response) {
@@ -308,95 +408,4 @@ function sendGetStarted(user_psid, response) {
 		"message": message
 	};
 	callSendApi(request_body);
-}
-
-function sendTextMessage(user_psid, response, type) {
-	let message = '';
-	
-	switch (type) {
-		case 'text':
-			message = {
-				"text": response,
-				"metadata": "BBCL_METADATA"
-			};
-		break;
-		case 'noticias':
-			message = {
-				"attachment": {
-					"type": "template",
-					"payload": {
-						"template_type": "generic",
-						"elements": [
-							{
-								"title": "BBCL",
-								"image_url": "https://media.biobiochile.cl/wp-content/uploads/2018/03/lanlan731.png",
-								"subtitle": response.text,
-								"default_action": {
-									"type": "web_url",
-									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
-									"messenger_extensions": false,
-									"webview_height_ratio": "tall"
-								}
-							}
-						]
-					}
-				}
-			};
-		break;
-	}
-
-	let request_body = {
-		"recipient": {
-			"id": user_psid
-		},
-		"message": message
-	};
-	callSendApi(request_body);
-}
-
-function callSendApi(data) {
-	console.log(data);
-	request({
-		"uri": conf.FB_MESSAGE_URL,
-		"method": 'POST',
-		"qs": {
-			"access_token": conf.PROFILE_TOKEN
-		},
-		"json": data
-	}, (err, res, body) => {
-		if (!err && res.statusCode == 200) {
-			let recipientId = body.recipient_id;
-			let messageId = body.message_id;
-
-			if (messageId) {
-				console.log("Se envió exitosamente el mensaje con el id %s al receptor %s", messageId, recipientId);
-			}else {
-                console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
-            }			
-		}else {
-			console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
-		}
-	});
-}
-
-function subscribeUser(user_psid, suscripcion) {
-	
-}
-
-function getUserData(user_psid) {
-	
-	request({
-		"uri": "https://graph.facebook.com/" + user_psid,
-		"method": "GET",
-		"qs": {
-			"fields": "first_name,last_name,profile_pic",
-			"access_token": conf.PROFILE_TOKEN
-		}
-	}, (err, res, body) => {
-		if (!err && res.statusCode == 200) {
-			console.log(body);
-		}else {
-			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
-		}
-	});
 }
