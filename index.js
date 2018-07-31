@@ -145,34 +145,17 @@ function postbackHandler(evento) {
 		case 'realtime':
 			subscribeUser(sender, payload);
 			break;
-		case 'group-nacional':
-			console.log('se seleccionó categoria nacional');
-			break;
-		case 'group-internacional':
-			console.log('se seleccionó categoria internacional');
-			break;
+		case 'group-nacional':			
+		case 'group-internacional':			
 		case 'group-economia':
-			console.log('se seleccionó categoria economia');
-			break;
 		case 'group-deportes':
-			console.log('se seleccionó categoria deportes');
-			break;
 		case 'group-ciencia-y-tecnologia':
-			console.log('se seleccionó categoria ciencia y tecnologia');
-			break;
 		case 'group-sociedad':
-			console.log('se seleccionó categoria sociedad');
-			break;
 		case 'group-artes-y-cultura':
-			console.log('se seleccionó categoria artes y cultura');
-			break;
 		case 'group-espectaculos-y-tv':
-			console.log('se seleccionó categoria espectáculos y tv');
+		case 'group-vida-actual':
+			subscribeToCategory(sender, payload);
 			break;
-		case 'group-vida':
-			console.log('se seleccionó categoria vida actual');
-			break;
-
 		default:
 			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!! ", "text");
 		break;
@@ -243,7 +226,8 @@ function subscribeUser(user_psid, suscripcion) {
 					if (err) throw err;
 					console.log('1 fila insertada');
 					if (novo) {sendCategoriasMessage(user_psid);}
-				});				
+					else {sendTextMessage(user_psid, 'Su subscripcion ha sido actualizada', 'text')}
+				});
 				
 			}else {
 				return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
