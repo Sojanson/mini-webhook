@@ -139,11 +139,14 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");			
+			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
 			break;
 		case 'daily':
 		case 'realtime':
 			subscribeUser(sender, payload);
+			break;
+		case 'nope':
+			sendTextMessage(sender, "desactivado")
 			break;
 		case 'group-nacional':			
 		case 'group-internacional':			
@@ -238,7 +241,20 @@ function subscribeUser(user_psid, suscripcion) {
 }
 
 function subscribeToCategory(user_psid, categoria) {
+	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
+	let sqlQuery = '';
+	let novo = true;
 
+	conf.MYSQL.query(select, function (err, result, fields){
+		if (err) throw err;
+		if (result.length > 0){
+			console.log('ya existe, actualizando');
+			novo = false;
+		}else {
+			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
+			novo = true			
+		}
+	});
 }
 
 function getUserData(user_psid) {
