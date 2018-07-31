@@ -208,8 +208,12 @@ function subscribeUser(user_psid, suscripcion) {
 		let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 		conf.MYSQL.query(select, function (err, result, fields){
 			if (err) throw err;
-				console.log(result);
-			})
+			if (result.length > 0){
+				console.log('hay registros');
+			}else {
+				console.log('a este weon no lo he visto ni en pelea de perros');
+			}
+		})
 		
 		/*let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
 
