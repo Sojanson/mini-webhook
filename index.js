@@ -380,13 +380,15 @@ function sendCategoriasMessage(user_psid, response) {
 				"template_type": "generic",
 				"elements": [
 					{
-
+						"title": "Categorias",
 						"buttons": cats[0].cats
 					},
-					{
+					{	
+						"title": "Categorias",
 						"buttons": cats[1].cats
 					},
 					{
+						"title": "Categorias",
 						"buttons": cats[2].cats
 					}
 				]
