@@ -214,12 +214,12 @@ function subscribeUser(user_psid, suscripcion) {
 		if (err) throw err;
 		if (result.length > 0){
 			console.log('ya existe, actualizando');
-			sqlQuery = `UPDATE bot_users SET subscription_type = '${suscripcion}') WHERE psid = '${user_psid}'`;
+			sqlQuery = `UPDATE bot_users SET subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
 		}else {
 			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
 			sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
 		}
-		
+
 		conf.MYSQL.query(sqlQuery, function (err, result){
 			if (err) throw err;
 			console.log('1 fila insertada');
