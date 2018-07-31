@@ -209,27 +209,54 @@ function subscribeUser(user_psid, suscripcion) {
 
 	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 	let sqlQuery = '';
+	let novo = true;
 
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
 			console.log('ya existe, actualizando');
-			sqlQuery = `UPDATE bot_users SET subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
+			novo = false;			
 		}else {
 			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
-			sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
+			novo = true			
 		}
 
-		conf.MYSQL.query(sqlQuery, function (err, result){
-			if (err) throw err;
-			console.log('1 fila insertada');
+		request({
+			"uri": "https://graph.facebook.com/" + user_psid,
+			"method": "GET",
+			"qs": {
+				"fields": "first_name,last_name,profile_pic",
+				"access_token": conf.PROFILE_TOKEN
+			},
+			"json" : true
+		}, function(err, res, body) {
+			if (!err && res.statusCode == 200) {
+				let name = body.first_name ? body.first_name : '';
+				let last_name = body.last_name ? body.last_name : '';
+
+				if (novo) {
+					sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
+				}else {
+					sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
+				}
+								
+				conf.MYSQL.query(sqlQuery, function (err, result){
+					if (err) throw err;
+					console.log('1 fila insertada');
+				});				
+				
+			}else {
+				return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
+			}
 		});
+		
 	});
 
 	
+	
 }
 
-function getUserData(user_psid) {
+function setUserData(user_psid) {
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
@@ -240,9 +267,7 @@ function getUserData(user_psid) {
 		"json" : true
 	}, function(err, res, body) {
 		if (!err && res.statusCode == 200) {
-			console.log(body);
-			let user = body;
-			let name = user.first_name ? user.first_name : '';
+			
 			let last_name = user.last_name ? user.last_name : '';
 		}else {
 			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
