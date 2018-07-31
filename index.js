@@ -209,7 +209,7 @@ function subscribeUser(user_psid, suscripcion) {
 		if (err) throw err;
 		console.log("Connected!");
 		console.log("inserting user" + user_psid);
-		let sql = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( ${user_psid}, '${name}', '${last_name}', '${suscripcion}')`;
+		let sql = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
 
 		conf.MYSQL.query(sql, function (err, result){
 			if (err) throw err;
