@@ -202,8 +202,8 @@ function callSendApi(data) {
 
 function subscribeUser(user_psid, suscripcion) {
 	let user = getUserData(user_psid);
-	//let name = user.first_name ? user.first_name : '';
-	//let last_name = user.last_name ? user.last_name : '';
+	let name = user.first_name ? user.first_name : '';
+	let last_name = user.last_name ? user.last_name : '';
 	console.log(user);
 
 	/*conf.MYSQL.connect(function(err) {
@@ -227,8 +227,9 @@ function subscribeUser(user_psid, suscripcion) {
 
 function getUserData(user_psid) {
 
-	console.log(user_psid);	
-	let user = request({
+	let user = {};
+
+	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
 		"qs": {
@@ -237,10 +238,9 @@ function getUserData(user_psid) {
 		}
 	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
-			return body;
+			user = body;
 		}else {
 			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
-			return false;
 		}
 	});
 
