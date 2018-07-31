@@ -236,7 +236,7 @@ function getUserData(user_psid) {
 		}
 	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
-			return body;
+			return res;
 		}else {
 			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
 			return false;
