@@ -226,7 +226,8 @@ function subscribeUser(user_psid, suscripcion) {
 }
 
 function getUserData(user_psid) {
-	
+
+	console.log(user_psid);	
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
