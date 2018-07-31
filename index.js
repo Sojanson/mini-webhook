@@ -211,12 +211,12 @@ function subscribeUser(user_psid, suscripcion) {
 				console.log(result);
 			})
 		
-		let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
+		/*let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
 
 		conf.MYSQL.query(insert, function (err, result){
 			if (err) throw err;
 			console.log('1 fila insertada');
-		});
+		});*/
 	});
 }
 
