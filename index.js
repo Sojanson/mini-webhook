@@ -234,7 +234,7 @@ function getUserData(user_psid) {
 			"fields": "first_name,last_name,profile_pic",
 			"access_token": conf.PROFILE_TOKEN
 		}
-	}, (err, res, body) => {
+	}, function(err, res, body) {
 		if (!err && res.statusCode == 200) {
 			let user = JSON.parse(body);
 			return user;
