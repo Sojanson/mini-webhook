@@ -381,13 +381,13 @@ function sendCategoriasMessage(user_psid, response) {
 				"elements": [
 					{
 
-						"buttons": grupo[0].cats
+						"buttons": cats[0].cats
 					},
 					{
-						"buttons": grupo[1].cats
+						"buttons": cats[1].cats
 					},
 					{
-						"buttons": grupo[2].cats
+						"buttons": cats[2].cats
 					}
 				]
 				
