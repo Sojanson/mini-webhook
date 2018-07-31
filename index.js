@@ -201,10 +201,9 @@ function callSendApi(data) {
 }
 
 function subscribeUser(user_psid, suscripcion) {
-	let user = getUserData(user_psid);	
+	let user = getUserData(user_psid);
 	let name = user.first_name ? user.first_name : '';
 	let last_name = user.last_name ? user.last_name : '';
-	console.log(user);
 
 	conf.MYSQL.connect(function(err) {
 		if (err) throw err;
@@ -213,7 +212,7 @@ function subscribeUser(user_psid, suscripcion) {
 
 		conf.MYSQL.query(sql, function (err, result){
 			if (err) throw err;
-			console.log('1 usuario insertado');
+			console.log('1 fila insertada');
 		});
 	});
 }
