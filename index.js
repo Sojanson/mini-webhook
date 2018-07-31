@@ -219,12 +219,14 @@ function subscribeUser(user_psid, suscripcion) {
 			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
 			sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
 		}
+		
+		conf.MYSQL.query(sqlQuery, function (err, result){
+			if (err) throw err;
+			console.log('1 fila insertada');
+		});
 	});
 
-	conf.MYSQL.query(sqlQuery, function (err, result){
-		if (err) throw err;
-		console.log('1 fila insertada');
-	});
+	
 }
 
 function getUserData(user_psid) {
