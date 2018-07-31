@@ -227,8 +227,6 @@ function subscribeUser(user_psid, suscripcion) {
 
 function getUserData(user_psid) {
 
-	let user = {};
-
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
@@ -238,13 +236,12 @@ function getUserData(user_psid) {
 		}
 	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
-			user = body;
+			let user = JSON.parse(body);
+			return user;
 		}else {
-			console.error("No hubo comunicación", res.statusCode, res.statusMessagem, body.error);
+			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
 		}
 	});
-
-	return user;
 }
 
 function sendTextMessage(user_psid, response, type) {
