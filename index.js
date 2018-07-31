@@ -117,6 +117,9 @@ function messageHandler(evento) {
 				text = 'ta mala esta wea';
 				sendTextMessage(sender, text, type);
 				break;
+			case 'categorias':
+				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
+				break;
 			case 'dame notas':
 				text = 'todas las categorias';
 				type = 'noticias';
@@ -139,11 +142,7 @@ function postbackHandler(evento) {
 			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");			
 			break;
 		case 'daily':
-			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
-			subscribeUser(sender, payload);
-			break;
 		case 'realtime':
-			sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 			subscribeUser(sender, payload);
 			break;
 		case 'group-nacional':
@@ -239,10 +238,11 @@ function subscribeUser(user_psid, suscripcion) {
 				}else {
 					sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
 				}
-								
+
 				conf.MYSQL.query(sqlQuery, function (err, result){
 					if (err) throw err;
 					console.log('1 fila insertada');
+					if (novo) {sendCategoriasMessage(user_psid);}
 				});				
 				
 			}else {
