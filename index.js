@@ -176,7 +176,6 @@ function postbackHandler(evento) {
 }
 
 function callSendApi(data) {
-	console.log(data);
 	request({
 		"uri": conf.FB_MESSAGE_URL,
 		"method": 'POST',
@@ -200,13 +199,9 @@ function callSendApi(data) {
 	});
 }
 
-function subscribeUser(user_psid, suscripcion) {
-	let user = getUserData(user_psid);
-	let name = user.first_name ? user.first_name : '';
-	let last_name = user.last_name ? user.last_name : '';
-	console.log(user);
+function subscribeUser(user_psid, suscripcion) {	
 
-	/*conf.MYSQL.connect(function(err) {
+	conf.MYSQL.connect(function(err) {
 		if (err) throw err;
 		console.log("Connected!");
 
@@ -216,18 +211,16 @@ function subscribeUser(user_psid, suscripcion) {
 				console.log(result);
 			})
 		
-		let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
+		let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
 
 		conf.MYSQL.query(insert, function (err, result){
 			if (err) throw err;
 			console.log('1 fila insertada');
 		});
-	});*/
+	});
 }
 
 function getUserData(user_psid) {
-	let user;
-
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
@@ -238,8 +231,10 @@ function getUserData(user_psid) {
 		"json" : true
 	}, function(err, res, body) {
 		if (!err && res.statusCode == 200) {
-			let user = JSON.parse(body);
-			return user;
+			console.log(body);
+			let user = body;
+			let name = user.first_name ? user.first_name : '';
+			let last_name = user.last_name ? user.last_name : '';
 		}else {
 			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
 		}
