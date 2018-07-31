@@ -16,11 +16,6 @@ let options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
 
-let conexion = conf.MYSQL.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
-
 // Sets server port and logs message on success
 https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
 
@@ -206,22 +201,30 @@ function callSendApi(data) {
 
 function subscribeUser(user_psid, suscripcion) {	
 
-	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
-	conexion.query(select, function (err, result, fields){
+	conf.MYSQL.connect(function(err) {
 		if (err) throw err;
-		if (result.length > 0){
-			console.log('hay registros');
-		}else {
-			console.log('a este weon no lo he visto ni en pelea de perros');
-		}
-	})
-	
-	/*let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
+		console.log("Connected!");
 
-	conf.MYSQL.query(insert, function (err, result){
-		if (err) throw err;
-		console.log('1 fila insertada');
-	});*/
+		let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
+		let sqlQuery = '';
+
+		conf.MYSQL.query(select, function (err, result, fields){
+			if (err) throw err;
+			if (result.length > 0){
+				console.log('ya existe, actualizando');
+				sqlQuery = `UPDATE bot_users SET subscription_type = '${suscripcion}') WHERE psid = '${user_psid}'`;
+			}else {
+				console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
+				sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '', '', '${suscripcion}')`;
+			}
+		});
+
+		conf.MYSQL.query(sqlQuery, function (err, result){
+			if (err) throw err;
+			console.log('1 fila insertada');
+		});
+	});
+	conf.MYSQL.end();
 }
 
 function getUserData(user_psid) {
