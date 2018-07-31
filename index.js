@@ -89,7 +89,7 @@ function messageHandler(evento) {
 
 	console.log('El usuario %d envió el mensaje %s a la página %d', sender, message, recipient);
 
-	if (message) {		
+	if (message) {
 		switch (message.toLowerCase()) {
 			case 'hola':
 				text = 'hola';
@@ -208,7 +208,8 @@ function subscribeUser(user_psid, suscripcion) {
 	conf.MYSQL.connect(function(err) {
 		if (err) throw err;
 		console.log("Connected!");
-		let sql = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( ${user_psid}, '${name}', '${last_name}', '${suscripcion}')`;
+		console.log("inserting user" + user_psid);
+		let sql = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
 
 		conf.MYSQL.query(sql, function (err, result){
 			if (err) throw err;
