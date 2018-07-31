@@ -209,10 +209,16 @@ function subscribeUser(user_psid, suscripcion) {
 	conf.MYSQL.connect(function(err) {
 		if (err) throw err;
 		console.log("Connected!");
-		console.log("inserting user" + user_psid);
-		let sql = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
 
-		conf.MYSQL.query(sql, function (err, result){
+		let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
+		conf.MYSQL.query(select, function (err, result, fields){
+			if (err) throw err;
+				console.log(result);
+			})
+		
+		let insert = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
+
+		conf.MYSQL.query(insert, function (err, result){
 			if (err) throw err;
 			console.log('1 fila insertada');
 		});
@@ -236,8 +242,6 @@ function getUserData(user_psid) {
 			return false;
 		}
 	});
-
-	return false;
 }
 
 function sendTextMessage(user_psid, response, type) {
