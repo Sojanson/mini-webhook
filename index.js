@@ -226,6 +226,7 @@ function subscribeUser(user_psid, suscripcion) {
 }
 
 function getUserData(user_psid) {
+	let user;
 
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
@@ -233,7 +234,8 @@ function getUserData(user_psid) {
 		"qs": {
 			"fields": "first_name,last_name,profile_pic",
 			"access_token": conf.PROFILE_TOKEN
-		}
+		},
+		"json" : true
 	}, function(err, res, body) {
 		if (!err && res.statusCode == 200) {
 			let user = JSON.parse(body);
