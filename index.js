@@ -87,7 +87,7 @@ function messageHandler(evento) {
 	let text = '';
 	let type = 'text';
 
-	console.log('El usuario %d envió el mensaje %s a la página %d', sender, message, recipient);
+	//console.log('El usuario %d envió el mensaje %s a la página %d', sender, message, recipient);
 
 	if (message) {
 		switch (message.toLowerCase()) {
@@ -202,11 +202,11 @@ function callSendApi(data) {
 
 function subscribeUser(user_psid, suscripcion) {
 	let user = getUserData(user_psid);
-	let name = user.first_name ? user.first_name : '';
-	let last_name = user.last_name ? user.last_name : '';
+	//let name = user.first_name ? user.first_name : '';
+	//let last_name = user.last_name ? user.last_name : '';
 	console.log(user);
 
-	conf.MYSQL.connect(function(err) {
+	/*conf.MYSQL.connect(function(err) {
 		if (err) throw err;
 		console.log("Connected!");
 
@@ -222,7 +222,7 @@ function subscribeUser(user_psid, suscripcion) {
 			if (err) throw err;
 			console.log('1 fila insertada');
 		});
-	});
+	});*/
 }
 
 function getUserData(user_psid) {
