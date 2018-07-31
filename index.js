@@ -226,7 +226,7 @@ function subscribeUser(user_psid, suscripcion) {
 					if (err) throw err;
 					console.log('1 fila insertada');
 					if (novo) {sendCategoriasMessage(user_psid);}
-					else {sendTextMessage(user_psid, 'Su subscripcion ha sido actualizada', 'text')}
+					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!', 'text')}
 				});
 				
 			}else {
@@ -234,13 +234,14 @@ function subscribeUser(user_psid, suscripcion) {
 			}
 		});
 		
-	});
-
-	
-	
+	});	
 }
 
-function setUserData(user_psid) {
+function subscribeToCategory(user_psid, categoria) {
+
+}
+
+function getUserData(user_psid) {
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
 		"method": "GET",
@@ -304,7 +305,6 @@ function sendTextMessage(user_psid, response, type) {
 }
 
 function sendCategoriasMessage(user_psid, response) {
-	let message = '';
 
 	let cats = [
 		{
@@ -360,28 +360,6 @@ function sendCategoriasMessage(user_psid, response) {
 		}
 	];
 
-	cats.forEach(function(grupo){
-		message = {
-			"attachment": {
-				"type": "template",
-				"payload": {
-					"template_type": "button",
-					"text": "...",
-					"buttons": grupo.cats
-				}
-			}
-		};
-
-		let request_body = {
-			"recipient": {
-				"id": user_psid
-			},
-			"message": message
-		};
-
-		callSendApi(request_body);
-	});
-
 	let textMessage = {
 		"recipient": {
 			"id": user_psid
@@ -393,6 +371,38 @@ function sendCategoriasMessage(user_psid, response) {
 	};
 
 	callSendApi(textMessage);
+
+	
+	let message = {
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "generic",
+				"elements": [
+					{
+
+						"buttons": grupo[0].cats
+					},
+					{
+						"buttons": grupo[1].cats
+					},
+					{
+						"buttons": grupo[2].cats
+					}
+				]
+				
+			}
+		}
+	};
+
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+
+	callSendApi(request_body);
 }
 
 function sendGetStarted(user_psid, response) {
@@ -404,6 +414,7 @@ function sendGetStarted(user_psid, response) {
 			"payload": {
 				"template_type": "button",
 				"text": response,
+
 				"buttons": [{
 					"type": "postback",
 					"title": "Recibir a diario",
