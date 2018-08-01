@@ -189,7 +189,7 @@ function postbackHandler(evento) {
 		case 'group-artes-y-cultura':
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
-			var cat_id = getCategoryId(payload);
+			getCategoryId(payload);
 			subscribeToCategory(sender, payload, cat_id);
 			break;
 		default:
@@ -204,8 +204,9 @@ function getCategoryId(slug) {
 		if (err) throw err;
 
 		console.log(result);
-
 	});
+
+
 }
 
 function callSendApi(data) {
