@@ -73,11 +73,11 @@ app.get('/categories', (req, res) => {
 						if (err) throw err;
 						
 						if (result.length > 0){
-							sqlQuery = `UPDATE bot_categories SET id = '${categoria.id}', name = '${categoria.name}', slug = '${categoria.slug}'`;
+							sqlQuery = `UPDATE bot_categories SET id = '${categoria.id}', name = '${categoria.title}', slug = '${categoria.slug}'`;
 							console.log('ya esiste');
 							console.log(sqlQuery);
 						}else {							
-							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES ('${categoria.id}', '${categoria.name}', '${categoria.slug}')`;							
+							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES ('${categoria.id}', '${categoria.title}', '${categoria.slug}')`;							
 							console.log('este es nuevito');
 							console.log(sqlQuery);
 						}
