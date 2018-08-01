@@ -287,8 +287,8 @@ function subscribeToCategory(user_psid, categoria, cat_id) {
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
-			let select = `SELECT subscribed FROM bot_user_category WHERE psid = ${user_psid} AND cat_id = ${cat_id}`;
-			conf.MYSQL.query(select, function (err, result, fields){
+			let select2 = `SELECT subscribed FROM bot_user_category WHERE psid = ${user_psid} AND cat_id = ${cat_id}`;
+			conf.MYSQL.query(select2, function (err, result, fields){
 				console.log(result);
 			});
 		}else {
