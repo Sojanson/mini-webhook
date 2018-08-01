@@ -189,13 +189,23 @@ function postbackHandler(evento) {
 		case 'group-artes-y-cultura':
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
-			subscribeToCategory(sender, payload);
+			var cat_id = getCategoryId(payload);
+			subscribeToCategory(sender, payload, cat_id);
 			break;
 		default:
 			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!! ", "text");
 		break;
 
 	}
+}
+function getCategoryId(slug) {
+	let sqlQuery = `SELECT id FROM bot_categories WHERE slug = '${slug}'`
+	conf.MYSQL.query(sqlQuery, function (err, result, fields){
+		if (err) throw err;
+
+		console.log(result);
+
+	});
 }
 
 function callSendApi(data) {
@@ -275,12 +285,11 @@ function subscribeUser(user_psid, suscripcion) {
 function subscribeToCategory(user_psid, categoria) {
 	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 	let sqlQuery = '';
-	let novo = true;
 
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
-			let selCat = `SELECT psid FROM bot_user_category WHERE `
+			let selCat = `SELECT psid, id, subscription_type FROM bot_user_category INNER JOIN bot_categories AS cat ON cat. =  `
 
 			conf.MYSQL.query()
 		}else {
