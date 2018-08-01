@@ -52,6 +52,18 @@ app.post('/webhook', (req, res) => {
 
 });
 
+app.get('/categories', (req, res) => {
+	request({
+		"uri" : conf.BBCL_CATEGORIES_URL,
+		"method": "GET",
+		"json": true
+	},(err, res, body) => {
+		if (!err && res.statusCode == 200) {
+			console.log(body[0].children);
+		}
+	})
+});
+
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
@@ -208,7 +220,7 @@ function subscribeUser(user_psid, suscripcion) {
 				"access_token": conf.PROFILE_TOKEN
 			},
 			"json" : true
-		}, function(err, res, body) {
+		}, (err, res, body) => {
 			if (!err && res.statusCode == 200) {
 				let name = body.first_name ? body.first_name : '';
 				let last_name = body.last_name ? body.last_name : '';
@@ -242,11 +254,14 @@ function subscribeToCategory(user_psid, categoria) {
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
-			console.log('ya existe, agregando categoria a usuario');
+			let selCat = `SELECT psid FROM bot_user_category WHERE `
+
+			conf.MYSQL.query()
 		}else {
 			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción', 'text');
-			sendGetStarted(user_psid, 'Elige tu tipo de suscripción');
+			sendGetStarted(user_psid, 'Elige tu tipo de suscripción, para poder asignar categorías');
 		}
+
 	});
 }
 
@@ -259,7 +274,7 @@ function getUserData(user_psid) {
 			"access_token": conf.PROFILE_TOKEN
 		},
 		"json" : true
-	}, function(err, res, body) {
+	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
 			
 			let last_name = user.last_name ? user.last_name : '';
@@ -365,6 +380,13 @@ function sendCategoriasMessage(user_psid, response) {
 				"type": "postback",
 				"title": "Vida Actual",
 				"payload": "group-vida"
+			}]
+		},
+		{
+			"cats": [{
+				"type": "postback",
+				"title": "Opinion",
+				"payload": "group-opinion"
 			}]
 		}
 	];
