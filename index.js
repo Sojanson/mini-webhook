@@ -189,8 +189,8 @@ function postbackHandler(evento) {
 		case 'group-artes-y-cultura':
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
-			getCategoryId(payload);
-			subscribeToCategory(sender, payload);
+			cat_id = getCategoryId(payload);
+			subscribeToCategory(sender, payload, cat_id);
 			break;
 		default:
 			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!! ", "text");
@@ -202,8 +202,7 @@ function getCategoryId(slug) {
 	let sqlQuery = `SELECT id FROM bot_categories WHERE slug = '${slug}'`
 	conf.MYSQL.query(sqlQuery, function (err, result, fields){
 		if (err) throw err;
-		console.log(result[0].id);
-		
+		return result[0].id;		
 	});
 }
 
@@ -281,15 +280,15 @@ function subscribeUser(user_psid, suscripcion) {
 	});	
 }
 
-function subscribeToCategory(user_psid, categoria) {
+function subscribeToCategory(user_psid, categoria, cat_id) {
 	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 	let sqlQuery = '';
 
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
-		if (result.length > 0){			
-
-			
+		if (result.length > 0){
+			let select = `SELECT subscribed FROM bot_user_category WHERE psid = ${user_psid} AND cat_id = ${cat_id}`;
+			console.log(result);
 		}else {
 			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción', 'text');
 			sendGetStarted(user_psid, 'Elige tu tipo de suscripción, para poder asignar categorías');
