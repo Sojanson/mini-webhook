@@ -53,14 +53,20 @@ app.post('/webhook', (req, res) => {
 });
 
 app.get('/categories', (req, res) => {
-	console.log('Holaaaaaaaaa');
 	request({
 		"uri" : conf.BBCL_CATEGORIES_URL,
 		"method": "GET",
 		"json": true
 	},(err, res, body) => {
 		if (!err && res.statusCode == 200) {
-			console.log(body[0].children);
+			let bbcl = body[0].children;
+
+			for (let categoria of bbcl) {
+				if (conf.CATEGORIES.indexOf(categoria.slug)) {
+					console.log(categoria.slug);
+				}
+			}
+
 		}
 	})
 });
@@ -155,8 +161,8 @@ function postbackHandler(evento) {
 		case 'nope':
 			sendTextMessage(sender, "desactivado")
 			break;
-		case 'group-nacional':			
-		case 'group-internacional':			
+		case 'group-nacional':
+		case 'group-internacional':
 		case 'group-economia':
 		case 'group-deportes':
 		case 'group-ciencia-y-tecnologia':
