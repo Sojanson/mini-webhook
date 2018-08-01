@@ -189,7 +189,7 @@ function postbackHandler(evento) {
 		case 'group-artes-y-cultura':
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
-			cat_id = getCategoryId(payload);
+			let cat_id = getCategoryId(payload);
 			subscribeToCategory(sender, payload, cat_id);
 			break;
 		default:
@@ -199,10 +199,10 @@ function postbackHandler(evento) {
 	}
 }
 function getCategoryId(slug) {
-	let sqlQuery = `SELECT id FROM bot_categories WHERE slug = '${slug}'`
+	let sqlQuery = `SELECT id FROM bot_categories WHERE slug = '${slug}'`;
 	conf.MYSQL.query(sqlQuery, function (err, result, fields){
 		if (err) throw err;
-		return result[0].id;		
+		return result[0].id;
 	});
 }
 
@@ -223,7 +223,7 @@ function callSendApi(data) {
 				console.log("Se envió exitosamente el mensaje con el id %s al receptor %s", messageId, recipientId);
 			}else {
                 console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
-            }			
+            }
 		}else {
 			console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 		}
