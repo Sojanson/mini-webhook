@@ -248,11 +248,10 @@ function subscribeToCategory(user_psid, categoria) {
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
-			console.log('ya existe, actualizando');
-			novo = false;
+			console.log('ya existe, agregando categoria a usuario');
 		}else {
-			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
-			novo = true			
+			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción', 'text');
+			sendGetStarted(user_psid, 'Elige tu tipo de suscripción');
 		}
 	});
 }
