@@ -74,7 +74,7 @@ app.get('/categories', (req, res) => {
 						if (result.length > 0){
 							sqlQuery = `UPDATE bot_categories SET id = ${categoria.id}, name = '${categoria.name}', slug = '${categoria.slug}'`;
 						}else {							
-							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES (${categoria.id}, '${categoria.name}', '${categoria.slug}'')`;
+							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES (${categoria.id}, '${categoria.name}', '${categoria.slug}')`;
 						}
 						conf.MYSQL.query(sqlQuery, function (err, result){
 							if (err) throw err;
