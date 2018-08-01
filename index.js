@@ -190,7 +190,7 @@ function postbackHandler(evento) {
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
 			getCategoryId(payload);
-			subscribeToCategory(sender, payload, cat_id);
+			subscribeToCategory(sender, payload);
 			break;
 		default:
 			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!! ", "text");
