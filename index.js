@@ -62,7 +62,7 @@ app.get('/categories', (req, res) => {
 			let bbcl = body[0].children;
 
 			for (let categoria of bbcl) {
-				if (conf.CATEGORIES.indexOf(categoria.slug)) {
+				if (conf.CATEGORIES.indexOf(categoria.slug) != -1) {
 					console.log(categoria.slug);
 				}
 			}
