@@ -288,7 +288,9 @@ function subscribeToCategory(user_psid, categoria, cat_id) {
 		if (err) throw err;
 		if (result.length > 0){
 			let select = `SELECT subscribed FROM bot_user_category WHERE psid = ${user_psid} AND cat_id = ${cat_id}`;
-			console.log(result);
+			conf.MYSQL.query(select, function (err, result, fields{
+				console.log(result);
+			}))
 		}else {
 			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción', 'text');
 			sendGetStarted(user_psid, 'Elige tu tipo de suscripción, para poder asignar categorías');
