@@ -79,16 +79,12 @@ app.get('/categories', (req, res) => {
 							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES ('${categoria.id}', '${categoria.name}', '${categoria.slug}')`;
 							console.log('este es nuevito');
 						}
-
-						conf.MYSQL.end();
-
-						conf.MYSQL.query(sqlQuery, function (err, result){
+						/*conf.MYSQL.query(sqlQuery, function (err, result){
 							if (err) throw err;
 							console.log('1 categoria actualizada');
-							conf.MYSQL.end();
-						});
+						});*/
 
-					});
+					});					
 				}
 			}
 		}
