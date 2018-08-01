@@ -71,7 +71,7 @@ app.get('/categories', (req, res) => {
 						if (err) throw err;
 						
 						if (result.length > 0){
-							sqlQuery = `UPDATE bot_categories SET id = ${categoria.id}, name = '${categoria.title}', slug = '${categoria.slug}'`;
+							sqlQuery = `UPDATE bot_categories SET id = ${categoria.id}, name = '${categoria.title}', slug = '${categoria.slug}' WHERE id = ${categoria.id}`;
 							console.log('ya esiste');
 							console.log(sqlQuery);
 						}else {
