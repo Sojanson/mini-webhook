@@ -53,6 +53,7 @@ app.post('/webhook', (req, res) => {
 });
 
 app.get('/categories', (req, res) => {
+	console.log('Holaaaaaaaaa');
 	request({
 		"uri" : conf.BBCL_CATEGORIES_URL,
 		"method": "GET",
