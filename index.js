@@ -202,7 +202,7 @@ function getCategoryId(slug) {
 	let sqlQuery = `SELECT id FROM bot_categories WHERE slug = '${slug}'`
 	conf.MYSQL.query(sqlQuery, function (err, result, fields){
 		if (err) throw err;
-		console.log(result);
+		console.log(result[0].id);
 		
 	});
 }
