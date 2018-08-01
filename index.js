@@ -16,12 +16,6 @@ let options = {
 	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
 
-conf.MYSQL.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected!");
-	
-});
-
 // Sets server port and logs message on success
 https.createServer(options, app).listen(process.env.PORT || 5000, () => console.log('webhook is listening'));
 
