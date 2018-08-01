@@ -202,10 +202,8 @@ function getCategoryId(slug) {
 	let sqlQuery = `SELECT id FROM bot_categories WHERE slug = '${slug}'`
 	conf.MYSQL.query(sqlQuery, function (err, result, fields){
 		if (err) throw err;
-		console.log(result.id);
+		
 	});
-
-
 }
 
 function callSendApi(data) {
@@ -288,10 +286,9 @@ function subscribeToCategory(user_psid, categoria) {
 
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
-		if (result.length > 0){
-			let selCat = `SELECT psid, id, subscription_type FROM bot_user_category INNER JOIN bot_categories AS cat ON cat. =  `
+		if (result.length > 0){			
 
-			conf.MYSQL.query()
+			
 		}else {
 			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción', 'text');
 			sendGetStarted(user_psid, 'Elige tu tipo de suscripción, para poder asignar categorías');
