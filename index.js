@@ -67,14 +67,15 @@ app.get('/categories', (req, res) => {
 			for (let categoria of bbcl) {
 				if (conf.CATEGORIES.indexOf(categoria.slug) != -1) {
 					let select = `SELECT slug FROM bot_categories WHERE slug = '${categoria.slug}'`;
+					let sqlQuery = '';
 
 					conf.MYSQL.query(select, function (err, result, fields){
 						if (err) throw err;
-						let sqlQuery;
+						
 						if (result.length > 0){
-							sqlQuery = `UPDATE bot_categories SET id = ${categoria.id}, name = '${categoria.name}', slug = '${categoria.slug}'`;
+							sqlQuery = `UPDATE bot_categories SET id = '${categoria.id}', name = '${categoria.name}', slug = '${categoria.slug}'`;
 						}else {							
-							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES (${categoria.id}, '${categoria.name}', '${categoria.slug}')`;
+							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES ('${categoria.id}', '${categoria.name}', '${categoria.slug}')`;
 						}
 						conf.MYSQL.query(sqlQuery, function (err, result){
 							if (err) throw err;
@@ -233,7 +234,7 @@ function subscribeUser(user_psid, suscripcion) {
 			novo = false;			
 		}else {
 			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
-			novo = true			
+			novo = true;
 		}
 
 		request({
