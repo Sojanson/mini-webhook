@@ -304,7 +304,7 @@ function sendTextMessage(user_psid, response, type) {
 							{
 								"title": "BBCL",
 								"image_url": "https://media.biobiochile.cl/wp-content/uploads/2018/03/lanlan731.png",
-								"subtitle": response.text,
+								"subtitle": response,
 								"default_action": {
 									"type": "web_url",
 									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
