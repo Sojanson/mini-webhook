@@ -62,8 +62,6 @@ app.get('/categories', (req, res) => {
 			let bbcl = body[0].children;
 			let catsObject = {};
 
-
-
 			for (let categoria of bbcl) {
 				if (conf.CATEGORIES.indexOf(categoria.slug) != -1) {
 					let select = `SELECT slug FROM bot_categories WHERE slug = '${categoria.slug}'`;
@@ -76,16 +74,17 @@ app.get('/categories', (req, res) => {
 							sqlQuery = `UPDATE bot_categories SET id = '${categoria.id}', name = '${categoria.title}', slug = '${categoria.slug}'`;
 							console.log('ya esiste');
 							console.log(sqlQuery);
-						}else {							
+						}else {
 							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES ('${categoria.id}', '${categoria.title}', '${categoria.slug}')`;							
 							console.log('este es nuevito');
 							console.log(sqlQuery);
 						}
-						conf.MYSQL.query(sqlQuery, function (err, result){
-							if (err) throw err;
-							console.log('1 categoria actualizada');
-						});
-
+						if (result) {
+							conf.MYSQL.query(sqlQuery, function (err, result){
+								if (err) throw err;
+								console.log('1 categoria actualizada');
+							});
+						}
 					});					
 				}
 			}
