@@ -16,7 +16,8 @@ let allowedCategories = [
 	'group-sociedad',
 	'group-artes-y-cultura',
 	'group-espectaculos-y-tv',
-	'group-vida-actual'
+	'group-vida-actual',
+	'group-opinion'
 ];
 
 let conf = module.exports = {

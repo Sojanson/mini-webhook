@@ -60,10 +60,30 @@ app.get('/categories', (req, res) => {
 	},(err, res, body) => {
 		if (!err && res.statusCode == 200) {
 			let bbcl = body[0].children;
+			let catsObject = {};
+
+
 
 			for (let categoria of bbcl) {
 				if (conf.CATEGORIES.indexOf(categoria.slug) != -1) {
-					console.log(categoria.slug);
+					let select = `SELECT slug FROM bot_categories WHERE slug = '${categoria.slug}'`;
+
+					conf.MYSQL.query(select, function (err, result, fields){
+						if (err) throw err;
+						let sqlQuery;
+						if (result.length > 0){
+							sqlQuery = `UPDATE bot_categories SET id = ${categoria.id}, name = '${categoria.name}', slug = '${categoria.slug}')`;
+						}else {							
+							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES (${categoria.id}, ${categoria.name}, ${categoria.slug})`;
+						}
+						conf.MYSQL.query(sqlQuery, function (err, result){
+							if (err) throw err;
+							console.log('1 categoria actualizada');
+						});
+
+					}
+					
+					
 				}
 			}
 
