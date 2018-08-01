@@ -81,12 +81,9 @@ app.get('/categories', (req, res) => {
 							console.log('1 categoria actualizada');
 						});
 
-					}
-					
-					
+					});					
 				}
 			}
-
 		}
 	})
 });
