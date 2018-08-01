@@ -75,7 +75,7 @@ app.get('/categories', (req, res) => {
 							console.log('ya esiste');
 							console.log(sqlQuery);
 						}else {
-							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES (${categoria.id}, '${categoria.title}', \`${categoria.slug}\`)`;
+							sqlQuery = `ÌNSERT INTO bot_categories (id, name, slug) VALUES(${categoria.id}, '${categoria.title}', \`${categoria.slug}\`)`;
 							console.log('este es nuevito');
 							console.log(sqlQuery);
 						}					
