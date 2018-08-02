@@ -61,9 +61,9 @@ app.post('/nota', (req, res) => {
 		if (err) throw err;
 
 		if (result.length > 0) {
-			console.log('no hay registros de esta nota');
+			console.log('ya hay registros de esta nota');
 		}else {
-			console.log('esta nota si existe, la vamos a insertar');
+			console.log('esta nota no existe, la vamos a insertar');
 			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description) VALUES (${body.id}, '${body.title}', '${body.link}', '${body.image}', '${body.description}')`;
 			conf.MYSQL.query(insert, (err, result) => {
 				if (err) throw err;
