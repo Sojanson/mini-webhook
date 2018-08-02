@@ -52,8 +52,7 @@ app.post('/webhook', (req, res) => {
 
 });
 
-app.post('/nota', (req, res) => {
-	console.log(req.body.entry[0]);
+app.post('/nota', (req, res) => {	
 	console.log(req.body);
 });
 
