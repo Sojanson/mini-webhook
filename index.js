@@ -189,10 +189,7 @@ function postbackHandler(evento) {
 		case 'group-artes-y-cultura':
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
-			let cat = getCategoryCallback(payload, function(err, cat){
-				if(err) throw err;
-				return cat;
-			});
+			let cat = getCategory(payload);
 			console.log(cat);
 			subscribeToCategory(sender, cat);
 			break;
@@ -202,11 +199,11 @@ function postbackHandler(evento) {
 
 	}
 }
-function getCategory(slug, callback) {
+function getCategory(slug) {
 	let sqlQuery = `SELECT id, name, slug FROM bot_categories WHERE slug = '${slug}'`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) =>{
 		if (err) throw err;
-		callback(null, result);
+		return result[0].id;
 		
 	});
 }
@@ -300,21 +297,21 @@ function subscribeToCategory(user_psid, categoria) {
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
-			let select2 = `SELECT subscribed FROM bot_user_category WHERE psid = ${user_psid} AND cat_id = ${categoria.id}`;
+			let select2 = `SELECT subscribed FROM bot_user_category WHERE psid = ${user_psid} AND cat_id = ${categoria}`;
 			conf.MYSQL.query(select2, function (err, result, fields){
 				if (err) throw err;
 				let sqlQuery;
 				if (result.length > 0) {
 					if (result[0].subscribed == 0) {
-						sqlQuery = `UPDATE bot_user_category SET subscribed = 1 WHERE psid = ${user_psid} AND cat_id = ${categoria.id}`;
-						sendTextMessage(user_psid, `Se ha re suscrito a la categoría ${categoria.name}`, 'text');
+						sqlQuery = `UPDATE bot_user_category SET subscribed = 1 WHERE psid = ${user_psid} AND cat_id = ${categoria}`;
+						//sendTextMessage(user_psid, `Se ha re suscrito a la categoría ${categoria.name}`, 'text');
 					}else if (result[0].subscribed == 1) {
-						sqlQuery = `UPDATE bot_user_category SET subscribed = 0 WHERE psid = ${user_psid} AND cat_id = ${cattegoria.id}`;
-						sendTextMessage(user_psid, `Se ha desactivado tu suscripcion a la categoría ${categoria.name}`, 'text');
+						sqlQuery = `UPDATE bot_user_category SET subscribed = 0 WHERE psid = ${user_psid} AND cat_id = ${cattegoria}`;
+						//sendTextMessage(user_psid, `Se ha desactivado tu suscripcion a la categoría ${categoria.name}`, 'text');
 					}					
 				}else {
-					sqlQuery = `INSERT INTO bot_user_category (psid, cat_id, subscribed) VALUES (${user_psid}, ${categoria.id}, 1)`;
-					sendTextMessage(user_psid, `Te has suscrito a la categoria ${categoria.name}`, 'text');
+					sqlQuery = `INSERT INTO bot_user_category (psid, cat_id, subscribed) VALUES (${user_psid}, ${categoria}, 1)`;
+					//sendTextMessage(user_psid, `Te has suscrito a la categoria ${categoria.name}`, 'text');
 				}
 				conf.MYSQL.query(sqlQuery, function (err, result){
 					if (err) throw err;
