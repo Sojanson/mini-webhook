@@ -53,7 +53,7 @@ app.post('/webhook', (req, res) => {
 });
 
 app.post('/nota', (req, res) => {	
-	console.log(req.body);
+	console.log(decodeURIComponent(req.body));
 });
 
 app.get('/categories', (req, res) => {
