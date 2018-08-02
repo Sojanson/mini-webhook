@@ -189,7 +189,7 @@ function postbackHandler(evento) {
 		case 'group-artes-y-cultura':
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
-			let cat = getCategory(payload);
+			let cat = getCategoryCallback(payload);
 			console.log(cat);
 			subscribeToCategory(sender, cat);
 			break;
@@ -199,13 +199,19 @@ function postbackHandler(evento) {
 
 	}
 }
-function getCategory(slug) {
+function getCategory(slug, callback) {
 	let sqlQuery = `SELECT id, name, slug FROM bot_categories WHERE slug = '${slug}'`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) =>{
 		if (err) throw err;
-		let category = {"id": result[0].id,	"name": result[0].name,	"slug": result[0].slug};
-		return category;
+		callback(result);
 		
+	});
+}
+
+function getCategoryCallback = function(req, res){
+	let catParam = req;
+	getCategory(catParam, function(data){
+		return data;
 	});
 }
 
