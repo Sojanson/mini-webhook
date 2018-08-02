@@ -53,7 +53,7 @@ app.post('/webhook', (req, res) => {
 });
 
 app.post('/nota', (req, res) => {	
-	let body = JSON.parse(decodeURIComponent(req.body));
+	let body = JSON.parse(req.body);
 	console.log(body.object);
 	console.log(body.id);
 	console.log(body.title);
