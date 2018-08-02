@@ -55,8 +55,8 @@ app.post('/webhook', (req, res) => {
 app.post('/nota', (req, res) => {	
 	let body = req.body;
 	console.log(body);
-	console.log(body.id);
-	console.log(body.title);
+	console.log(decodeURIComponent(body.id));
+	console.log(decodeURIComponent(body.title));
 });
 
 app.get('/categories', (req, res) => {
