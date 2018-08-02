@@ -201,9 +201,13 @@ function postbackHandler(evento) {
 function getCategory(slug) {
 	let sqlQuery = `SELECT id, name, slug FROM bot_categories WHERE slug = '${slug}'`;
 	conf.MYSQL.query(sqlQuery, function (err, result, fields){
-		if (err) throw err;
-		console.log(result[0]);
-		return result[0];	
+		if (err) throw err;		
+
+		return {
+			id: result[0].id,
+			name: result[0].name,
+			slug: result[0].slug
+		};
 	});
 }
 
