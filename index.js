@@ -208,7 +208,7 @@ function getCategory(slug, callback) {
 	});
 }
 
-function getCategoryCallback = function(req, res){
+function getCategoryCallback(req, res){
 	let catParam = req;
 	getCategory(catParam, function(data){
 		return data;
