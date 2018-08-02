@@ -190,6 +190,7 @@ function postbackHandler(evento) {
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
 			let cat = getCategory(payload);
+			console.log(cat);
 			subscribeToCategory(sender, cat);
 			break;
 		default:
@@ -208,8 +209,6 @@ function getCategory(slug) {
 			"name": result[0].name,
 			"slug": result[0].slug
 		};
-		console.log(categoria);
-
 		return categoria;
 	});
 }
