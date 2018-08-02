@@ -54,7 +54,6 @@ app.post('/webhook', (req, res) => {
 
 app.post('/nota', (req, res) => {
 	console.log(req);
-	console.log(res);
 });
 
 app.get('/categories', (req, res) => {
