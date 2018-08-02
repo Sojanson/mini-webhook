@@ -54,9 +54,28 @@ app.post('/webhook', (req, res) => {
 
 app.post('/nota', (req, res) => {	
 	let body = req.body;
-	console.log(body);
-	console.log(decodeURIComponent(body.id));
-	console.log(decodeURIComponent(body.title));
+
+	let select = `SELECT id FROM bot_notas_enviadas WHERE id = ${body.id}`;
+
+	conf.MYSQL.query(select, (err, result, fields) => {
+		if (err) throw err;
+
+		if (result.length > 0) {
+			console.log('no hay registros de esta nota');
+		}else {
+			console.log('esta nota si existe, la vamos a insertar');
+			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description) VALUES (${body.id}, '${body.title}', '${body.link}', '${body.image}', '${body.description}')`;
+			conf.MYSQL.query(insert, (err, result) => {
+				if (err) throw err;
+				console.log('nota insertada');
+			});
+		}
+
+	});
+	
+
+	res.status(200).send('Nota Recibida');
+
 });
 
 app.get('/categories', (req, res) => {
@@ -93,6 +112,7 @@ app.get('/categories', (req, res) => {
 					});					
 				}
 			}
+			res.status(200).send('solicitud realizada');
 		}
 	})
 });
