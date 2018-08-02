@@ -52,6 +52,10 @@ app.post('/webhook', (req, res) => {
 
 });
 
+app.post('/nota', (req, res) => {
+	console.log(req.body);
+});
+
 app.get('/categories', (req, res) => {
 	request({
 		"uri" : conf.BBCL_CATEGORIES_URL,
@@ -190,7 +194,7 @@ function postbackHandler(evento) {
 		case 'group-espectaculos-y-tv':
 		case 'group-vida-actual':
 			getCategory(payload, function(err, cat){
-				if(err) throw err;				
+				if(err) throw err;
 				subscribeToCategory(sender, cat);
 			});			
 			break;
@@ -441,7 +445,7 @@ function sendCategoriasMessage(user_psid, response) {
 			{
 				"type": "postback",
 				"title": "Vida Actual",
-				"payload": "group-vida"
+				"payload": "group-vida-actual"
 			}]
 		},
 		{
