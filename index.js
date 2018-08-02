@@ -307,7 +307,7 @@ function subscribeToCategory(user_psid, categoria) {
 						sqlQuery = `UPDATE bot_user_category SET subscribed = 1 WHERE psid = ${user_psid} AND cat_id = ${categoria.id}`;
 						sendTextMessage(user_psid, `Se ha re suscrito a la categoría ${categoria.name}`, 'text');
 					}else if (result[0].subscribed == 1) {
-						sqlQuery = `UPDATE bot_user_category SET subscribed = 0 WHERE psid = ${user_psid} AND cat_id = ${cattegoria.id}`;
+						sqlQuery = `UPDATE bot_user_category SET subscribed = 0 WHERE psid = ${user_psid} AND cat_id = ${categoria.id}`;
 						sendTextMessage(user_psid, `Se ha desactivado tu suscripcion a la categoría ${categoria.name}`, 'text');
 					}					
 				}else {
