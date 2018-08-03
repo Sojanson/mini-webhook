@@ -425,14 +425,14 @@ function sendNewsMessage(user_psid, nota) {
 
 
 	if (Array.isArray(user_psid)) {
-		let batch = '';
+		/*let batch = '';
 		let object = {};
 		for (let user of user_psid) {
 			object = {
 				"method": "POST",
 				"headers": [{"name": "Content-Type", "value": "application/json"}],
 				"relative_url": "me/messages?access_token=" + conf.PROFILE_TOKEN,
-				"body": "recipient%5Bid%5D="+user.psid+"&message%5Btext%5D="+texto
+				"body": "recipient%5Bid%5D="+user.psid+"&message%5Battachment%5D%5Btype%5D=template"+texto
 			};
 
 			batch += JSON.stringify(object)+ ",";
@@ -454,7 +454,39 @@ function sendNewsMessage(user_psid, nota) {
 			}else {
 				console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 			}
-		});
+		});*/
+
+		for (let user of user_psid) {
+			message = {
+				"attachment": {
+					"type": "template",
+					"payload": {
+						"template_type": "generic",
+						"elements": [
+							{
+								"title": nota.title,
+								"image_url": nota.image,
+								"subtitle": texto,
+								"default_action": {
+									"type": "web_url",
+									"url": nota.link,
+									"messenger_extensions": false,
+									"webview_height_ratio": "tall"
+								}
+							}
+						]
+					}
+				}
+			};
+
+			let request_body = {
+				"recipient": {
+					"id": user.psid
+				},
+				"message": message
+			};
+			callSendApi(request_body);
+		}
 		
 	}else {
 		message = {
