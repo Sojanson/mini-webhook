@@ -425,7 +425,7 @@ function sendNewsMessage(user_psid, nota) {
 
 
 	if (Array.isArray(user_psid)) {
-		let batch = [];
+		let batch;
 		let object = {};
 		for (let user of user_psid) {
 			object = {
@@ -435,10 +435,10 @@ function sendNewsMessage(user_psid, nota) {
 				"body": "recipient[id]="+user+"&message[text]="+texto
 			};
 
-			batch.push(JSON.stringify(object));
-		}
+			batch += JSON.stringify(object)+ ",";
 
-		batch = JSON.stringify(batch);
+		}
+		
 		console.log(batch);
 
 		/*request({
