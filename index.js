@@ -64,6 +64,7 @@ app.post('/nota', (req, res) => {
 			console.log('ya hay registros de esta nota');
 		}else {
 			console.log('esta nota no existe, la vamos a insertar');
+			let image = body.image.replace(/http:\/\/www|https:\/\/www|http:\/\/bbcl.qa|https:\/\/bbcl.qa/, "https://media");
 			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description, cat_id) VALUES (${body.id}, '${body.title}', '${body.link}', '${body.image}', '${body.description}', ${body.categoria})`;
 			conf.MYSQL.query(insert, (err, result) => {
 				if (err) throw err;
