@@ -423,10 +423,22 @@ function sendNewsMessage(user_psid, nota) {
 	let message;
 	let texto = nota.description == '' ? nota.title : nota.description;
 
+
 	if (Array.isArray(user_psid)) {
+		let batch = [];
+		let object = {};
 		for (let user of user_psid) {
-			console.log(user.psid);
+			object = {
+				"method": "POST",
+				"headers": [{"name": "Content-Type", "value": "application/json"}],
+				"relative_url": "me/messages?access_token=" + conf.PROFILE_TOKEN,
+				"body": "recipient[id]="+user+"&message[text]="+texto
+			};
+
+			batch.push(JSON.stringify(object));
 		}
+
+		console.log(batch);
 	}else {
 		message = {
 			"attachment": {
