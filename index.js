@@ -71,7 +71,7 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 
-				buildBatchRequest();
+				buildBatchRequest(body.categoria, function(){});
 
 			});
 		}
