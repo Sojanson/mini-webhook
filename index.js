@@ -60,16 +60,19 @@ app.post('/nota', (req, res) => {
 
 	conf.MYSQL.query(select, (err, result, fields) => {
 		if (err) throw err;
+		console.log(result.length);
 		if (result.length > 0) {
 			console.log('ya hay registros de esta nota');
 		}else {
 			console.log('esta nota no existe, la vamos a insertar');
 			let image = body.image.replace(/http:\/\/www|https:\/\/www|http:\/\/bbcl.qa|https:\/\/bbcl.qa/, "https://media");
-			console.log(image);
 			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description, cat_id) VALUES (${body.id}, '${body.title}', '${body.link}', '${image}', '${body.description}', ${body.categoria})`;
 			conf.MYSQL.query(insert, (err, result) => {
 				if (err) throw err;
 				console.log('nota insertada');
+
+				buildBatchRequest();
+
 			});
 		}
 	});
@@ -226,20 +229,19 @@ function postbackHandler(evento) {
 
 	}
 }
+function buildBatchRequest(cat_id, callback) {
+	let sqlQuery = `SELECT psid, cat_id, subscribed FROM bot_user_category WHERE subscribed = 1 AND cat_id = ${cat_id}`;
+	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
+		if(err) throw err;
+		console.log(result);
+	});
+}
 function getCategory(slug, callback) {
 	let sqlQuery = `SELECT id, name, slug FROM bot_categories WHERE slug = '${slug}'`;
-	conf.MYSQL.query(sqlQuery, (err, result, fields) =>{
+	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if (err) throw err;
 		callback(null, result[0]);
 		
-	});
-}
-
-function getCategoryCallback(data, callback){
-	
-	getCategory(data, function(err, result){
-		if(err || !result.length) return callback('error or no results');
-		callback(null, result);
 	});
 }
 
