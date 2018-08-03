@@ -71,7 +71,10 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 
-				buildBatchRequest(body.categoria, function(){});
+				buildBatchRequest(body.categoria, function(err, result){
+
+
+				});
 
 			});
 		}
@@ -160,23 +163,23 @@ function messageHandler(evento) {
 		switch (message.toLowerCase()) {
 			case 'hola':
 				text = 'hola';
-				sendTextMessage(sender, text, type);
+				sendTextMessage(sender, text);
 				break;
 			case 'matate':
 				text = 'matate tú';
-				sendTextMessage(sender, text, type);
+				sendTextMessage(sender, text);
 				break;
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
-				sendTextMessage(sender, text, type);
+				sendTextMessage(sender, text);
 				break;
 			case 'holi':
 				text = 'holi tenis pololi?';
-				sendTextMessage(sender, text, type);
+				sendTextMessage(sender, text);
 				break;
 			case 'no te cacho':
 				text = 'ta mala esta wea';
-				sendTextMessage(sender, text, type);
+				sendTextMessage(sender, text);
 				break;
 			case 'categorias':
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
@@ -184,7 +187,7 @@ function messageHandler(evento) {
 			case 'dame notas':
 				text = 'todas las categorias';
 				type = 'noticias';
-				sendTextMessage(sender, text, type);
+				sendTextMessage(sender, text);
 				break;
 		}		
 	}
@@ -224,7 +227,7 @@ function postbackHandler(evento) {
 			});			
 			break;
 		default:
-			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!! ", "text");
+			sendTextMessage(sender, "loco, ¡¡¿que hiciste?!!");
 		break;
 
 	}
@@ -233,7 +236,7 @@ function buildBatchRequest(cat_id, callback) {
 	let sqlQuery = `SELECT psid, cat_id, subscribed FROM bot_user_category WHERE subscribed = 1 AND cat_id = ${cat_id}`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if(err) throw err;
-		console.log(result);
+		callback(null, result);
 	});
 }
 function getCategory(slug, callback) {
@@ -308,7 +311,7 @@ function subscribeUser(user_psid, suscripcion) {
 					if (err) throw err;
 					console.log('1 fila insertada');
 					if (novo) {sendCategoriasMessage(user_psid);}
-					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!', 'text')}
+					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!'}
 				});
 				
 			}else {
@@ -333,14 +336,14 @@ function subscribeToCategory(user_psid, categoria) {
 				if (result.length > 0) {
 					if (result[0].subscribed == 0) {
 						sqlQuery = `UPDATE bot_user_category SET subscribed = 1 WHERE psid = ${user_psid} AND cat_id = ${categoria.id}`;
-						sendTextMessage(user_psid, `Se ha re suscrito a la categoría ${categoria.name}`, 'text');
+						sendTextMessage(user_psid, `Se ha re suscrito a la categoría ${categoria.name}`;
 					}else if (result[0].subscribed == 1) {
 						sqlQuery = `UPDATE bot_user_category SET subscribed = 0 WHERE psid = ${user_psid} AND cat_id = ${categoria.id}`;
-						sendTextMessage(user_psid, `Se ha desactivado tu suscripcion a la categoría ${categoria.name}`, 'text');
+						sendTextMessage(user_psid, `Se ha desactivado tu suscripcion a la categoría ${categoria.name}`);
 					}					
 				}else {
 					sqlQuery = `INSERT INTO bot_user_category (psid, cat_id, subscribed) VALUES (${user_psid}, ${categoria.id}, 1)`;
-					sendTextMessage(user_psid, `Te has suscrito a la categoria ${categoria.name}`, 'text');
+					sendTextMessage(user_psid, `Te has suscrito a la categoria ${categoria.name}`);
 				}
 				conf.MYSQL.query(sqlQuery, function (err, result){
 					if (err) throw err;
@@ -348,7 +351,7 @@ function subscribeToCategory(user_psid, categoria) {
 				})
 			});
 		}else {
-			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción', 'text');
+			sendTextMessage(user_psid, 'Aún no has seleccionado un tipo de suscripción');
 			sendGetStarted(user_psid, 'Elige tu tipo de suscripción, para poder asignar categorías');
 		}
 
@@ -374,41 +377,49 @@ function getUserData(user_psid) {
 	});
 }
 
-function sendTextMessage(user_psid, response, type) {
+function sendTextMessage(user_psid, response) {
 	let message = '';
 	
-	switch (type) {
-		case 'text':
-			message = {
-				"text": response,
-				"metadata": "BBCL_METADATA"
-			};
-		break;
-		case 'noticias':
-			message = {
-				"attachment": {
-					"type": "template",
-					"payload": {
-						"template_type": "generic",
-						"elements": [
-							{
-								"title": "BBCL",
-								"image_url": "https://media.biobiochile.cl/wp-content/uploads/2018/03/lanlan731.png",
-								"subtitle": response,
-								"default_action": {
-									"type": "web_url",
-									"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
-									"messenger_extensions": false,
-									"webview_height_ratio": "tall"
-								}
-							}
-						]
-					}
-				}
-			};
-		break;
-	}
+	
+	
+	message = {
+		"text": response,
+		"metadata": "BBCL_METADATA"
+	};	
 
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+	callSendApi(request_body);
+}
+
+function sendNewsMessage(user_psid, response) {
+
+	message = {
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "generic",
+				"elements": [
+					{
+						"title": "BBCL",
+						"image_url": "https://media.biobiochile.cl/wp-content/uploads/2018/03/lanlan731.png",
+						"subtitle": response,
+						"default_action": {
+							"type": "web_url",
+							"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
+							"messenger_extensions": false,
+							"webview_height_ratio": "tall"
+						}
+					}
+				]
+			}
+		}
+	};
+	
 	let request_body = {
 		"recipient": {
 			"id": user_psid
