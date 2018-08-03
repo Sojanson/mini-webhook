@@ -425,7 +425,7 @@ function sendNewsMessage(user_psid, nota) {
 
 
 	if (Array.isArray(user_psid)) {
-		let batch;
+		let batch = '';
 		let object = {};
 		for (let user of user_psid) {
 			object = {
