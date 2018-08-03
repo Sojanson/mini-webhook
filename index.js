@@ -209,7 +209,7 @@ function postbackHandler(evento) {
 			subscribeUser(sender, payload);
 			break;
 		case 'nope':
-			sendTextMessage(sender, "desactivado")
+			sendTextMessage(sender, "desactivado");
 			break;
 		case 'group-nacional':
 		case 'group-internacional':
@@ -397,7 +397,7 @@ function sendNewsMessage(user_psid, nota) {
 
 	let texto = nota.description == '' ? nota.title : nota.description;
 
-	message = {
+	let message = {
 		"attachment": {
 			"type": "template",
 			"payload": {
