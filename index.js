@@ -432,7 +432,7 @@ function sendNewsMessage(user_psid, nota) {
 				"method": "POST",
 				"headers": [{"name": "Content-Type", "value": "application/json"}],
 				"relative_url": "me/messages?access_token=" + conf.PROFILE_TOKEN,
-				"body": encodeURIComponent("recipient[id]="+user+"&message[text]="+texto)
+				"body": "recipient%5Bid%5D="+user+"&message%5Btext%5D="+texto
 			};
 
 			batch += JSON.stringify(object)+ ",";
