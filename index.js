@@ -54,26 +54,23 @@ app.post('/webhook', (req, res) => {
 
 app.post('/nota', (req, res) => {	
 	let body = req.body;
+	console.log(body);
 
 	let select = `SELECT id FROM bot_notas_enviadas WHERE id = ${body.id}`;
 
 	conf.MYSQL.query(select, (err, result, fields) => {
 		if (err) throw err;
-
 		if (result.length > 0) {
 			console.log('ya hay registros de esta nota');
 		}else {
 			console.log('esta nota no existe, la vamos a insertar');
-			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description) VALUES (${body.id}, '${body.title}', '${body.link}', '${body.image}', '${body.description}')`;
+			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description, cat_id) VALUES (${body.id}, '${body.title}', '${body.link}', '${body.image}', '${body.description}', ${body.categoria})`;
 			conf.MYSQL.query(insert, (err, result) => {
 				if (err) throw err;
 				console.log('nota insertada');
 			});
 		}
-
 	});
-	
-
 	res.status(200).send('Nota Recibida');
 
 });
