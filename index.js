@@ -71,8 +71,8 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 				
-				buildBatchRequest(body.categoria, function(err, result){
-					sendNewsMessage(result[0].psid, body);
+				getSubscribedUsers('realtime', body.categoria, function(err, result){
+					sendNewsMessage(result, body);
 				});
 
 			});
@@ -183,6 +183,9 @@ function messageHandler(evento) {
 			case 'categorias':
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 				break;
+			case 'suscripcion':
+				sendGetStarted(sender, "Estos son los tipos de suscripción que puedes elegir");
+				break;
 			case 'dame notas':
 				text = 'todas las categorias';
 				type = 'noticias';
@@ -231,8 +234,8 @@ function postbackHandler(evento) {
 
 	}
 }
-function buildBatchRequest(cat_id, callback) {
-	let sqlQuery = `SELECT psid, cat_id, subscribed FROM bot_user_category WHERE subscribed = 1 AND cat_id = ${cat_id}`;
+function getSubscribedUsers(subscripcion, cat_id, callback) {
+	let sqlQuery = `SELECT psid, cat_id, subscribed, subscription_type FROM bot_user_category AS uc INNER JOIN bot_users AS u ON uc.psid = u.psid  WHERE subscribed = 1 AND cat_id = ${cat_id} AND subscription_type = '${subscripcion}'`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if(err) throw err;
 		callback(null, result);
@@ -417,38 +420,44 @@ function sendTextMessage(user_psid, response) {
 }
 
 function sendNewsMessage(user_psid, nota) {
-
+	let message;
 	let texto = nota.description == '' ? nota.title : nota.description;
 
-	let message = {
-		"attachment": {
-			"type": "template",
-			"payload": {
-				"template_type": "generic",
-				"elements": [
-					{
-						"title": nota.title,
-						"image_url": nota.image,
-						"subtitle": texto,
-						"default_action": {
-							"type": "web_url",
-							"url": nota.link,
-							"messenger_extensions": false,
-							"webview_height_ratio": "tall"
-						}
-					}
-				]
-			}
+	if (Array.isArray(user_psid)) {
+		for (let user of user_psid) {
+			console.log(user);
 		}
-	};
+	}else {
+		message = {
+			"attachment": {
+				"type": "template",
+				"payload": {
+					"template_type": "generic",
+					"elements": [
+						{
+							"title": nota.title,
+							"image_url": nota.image,
+							"subtitle": texto,
+							"default_action": {
+								"type": "web_url",
+								"url": nota.link,
+								"messenger_extensions": false,
+								"webview_height_ratio": "tall"
+							}
+						}
+					]
+				}
+			}
+		};
 
-	let request_body = {
-		"recipient": {
-			"id": user_psid
-		},
-		"message": message
-	};
-	callSendApi(request_body);
+		let request_body = {
+			"recipient": {
+				"id": user_psid
+			},
+			"message": message
+		};
+		callSendApi(request_body);
+	}	
 }
 
 function sendCategoriasMessage(user_psid, response) {
