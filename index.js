@@ -441,27 +441,20 @@ function sendNewsMessage(user_psid, nota) {
 		batch = batch.slice(0, -1);
 		console.log(batch);
 		
-		/*request({
+		request({
 			"uri": "https://graph.facebook.com/v2.8",
 			"method": 'POST',
 			"qs": {
 				"access_token": conf.PROFILE_TOKEN,
-				"batch"
+				"batch": "[" + batch + "]"
 			}
 		}, (err, res, body) => {
 			if (!err && res.statusCode == 200) {
-				let recipientId = body.recipient_id;
-				let messageId = body.message_id;
-
-				if (messageId) {
-					console.log("Se envió exitosamente el mensaje con el id %s al receptor %s", messageId, recipientId);
-				}else {
-	                console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
-	            }
+	            console.log('exito al enviar el mensaje');
 			}else {
 				console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 			}
-		});*/
+		});
 		
 	}else {
 		message = {
