@@ -432,15 +432,15 @@ function sendNewsMessage(user_psid, nota) {
 				"method": "POST",
 				"headers": [{"name": "Content-Type", "value": "application/json"}],
 				"relative_url": "me/messages?access_token=" + conf.PROFILE_TOKEN,
-				"body": "recipient[id]="+user+"&message[text]="+texto
+				"body": encodeURIComponent("recipient[id]="+user+"&message[text]="+texto);
 			};
 
 			batch += JSON.stringify(object)+ ",";
 
 		}
-		
+		batch = batch.slice(0, -1);
 		console.log(batch);
-
+		
 		/*request({
 			"uri": "https://graph.facebook.com/v2.8",
 			"method": 'POST',
