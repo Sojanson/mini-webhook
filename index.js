@@ -425,7 +425,7 @@ function sendNewsMessage(user_psid, nota) {
 
 	if (Array.isArray(user_psid)) {
 		for (let user of user_psid) {
-			console.log(user);
+			console.log(user.psid);
 		}
 	}else {
 		message = {
