@@ -436,7 +436,6 @@ function sendNewsMessage(user_psid, nota) {
 			};
 
 			batch += JSON.stringify(object)+ ",";
-			console.log(JSON.stringify(object));
 
 		}
 		
