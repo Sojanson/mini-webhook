@@ -209,7 +209,7 @@ function postbackHandler(evento) {
 			subscribeUser(sender, payload);
 			break;
 		case 'nope':
-			sendTextMessage(sender, "desactivado");
+			unsubscribeUser(sender);
 			break;
 		case 'group-nacional':
 		case 'group-internacional':
@@ -318,6 +318,29 @@ function subscribeUser(user_psid, suscripcion) {
 			}
 		});
 		
+	});	
+}
+function unsubscribeUser(user_psid) {
+
+	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
+	let sqlQuery = '';
+
+	conf.MYSQL.query(select, function (err, result, fields){
+		if (err) throw err;
+		if (result.length > 0){
+			console.log('ya existe, desuscribiendo');
+			sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
+			conf.MYSQL.query(sqlQuery, function (err, result){
+				if (err) throw err;
+				console.log('1 fila insertada');
+				if (novo) {sendCategoriasMessage(user_psid);}
+				else {sendTextMessage(user_psid, 'Tu subscripcion ha sido desactivada')}
+			});
+
+		}else {
+			console.log('a este weon no lo he visto ni en pelea de perros, será ignorado');
+			sendTextMessage(user_psid, 'No estás suscrito');
+		}		
 	});	
 }
 
