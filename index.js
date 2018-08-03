@@ -235,7 +235,7 @@ function postbackHandler(evento) {
 	}
 }
 function getSubscribedUsers(subscripcion, cat_id, callback) {
-	let sqlQuery = `SELECT psid, cat_id, subscribed, subscription_type FROM bot_user_category AS uc INNER JOIN bot_users AS u ON uc.psid = u.psid  WHERE subscribed = 1 AND cat_id = ${cat_id} AND subscription_type = '${subscripcion}'`;
+	let sqlQuery = `SELECT uc.psid, cat_id, subscribed, subscription_type FROM bot_user_category AS uc INNER JOIN bot_users AS u ON uc.psid = u.psid  WHERE subscribed = 1 AND cat_id = ${cat_id} AND subscription_type = '${subscripcion}'`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if(err) throw err;
 		callback(null, result);
