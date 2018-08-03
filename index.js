@@ -65,15 +65,14 @@ app.post('/nota', (req, res) => {
 			console.log('ya hay registros de esta nota');
 		}else {
 			console.log('esta nota no existe, la vamos a insertar');
-			let image = body.image.replace(/http:\/\/www|https:\/\/www|http:\/\/bbcl.qa|https:\/\/bbcl.qa/, "https://media");
-			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description, cat_id) VALUES (${body.id}, '${body.title}', '${body.link}', '${image}', '${body.description}', ${body.categoria})`;
+			body.image = body.image.replace(/http:\/\/www|https:\/\/www|http:\/\/bbcl.qa|https:\/\/bbcl.qa/, "https://media");
+			let insert = `INSERT INTO bot_notas_enviadas (id, title, link, image_url, description, cat_id) VALUES (${body.id}, '${body.title}', '${body.link}', '${body.image}', '${body.description}', ${body.categoria})`;
 			conf.MYSQL.query(insert, (err, result) => {
 				if (err) throw err;
 				console.log('nota insertada');
-
+				
 				buildBatchRequest(body.categoria, function(err, result){
-
-
+					sendNewsMessage(result[0].psid, body);
 				});
 
 			});
@@ -311,7 +310,7 @@ function subscribeUser(user_psid, suscripcion) {
 					if (err) throw err;
 					console.log('1 fila insertada');
 					if (novo) {sendCategoriasMessage(user_psid);}
-					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!'}
+					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!')}
 				});
 				
 			}else {
@@ -379,9 +378,7 @@ function getUserData(user_psid) {
 
 function sendTextMessage(user_psid, response) {
 	let message = '';
-	
-	
-	
+
 	message = {
 		"text": response,
 		"metadata": "BBCL_METADATA"
@@ -396,7 +393,9 @@ function sendTextMessage(user_psid, response) {
 	callSendApi(request_body);
 }
 
-function sendNewsMessage(user_psid, response) {
+function sendNewsMessage(user_psid, nota) {
+
+	let texto = nota.description == '' ? nota.title : nota.description;
 
 	message = {
 		"attachment": {
@@ -405,12 +404,12 @@ function sendNewsMessage(user_psid, response) {
 				"template_type": "generic",
 				"elements": [
 					{
-						"title": "BBCL",
-						"image_url": "https://media.biobiochile.cl/wp-content/uploads/2018/03/lanlan731.png",
-						"subtitle": response,
+						"title": nota.title,
+						"image_url": nota.image,
+						"subtitle": texto,
 						"default_action": {
 							"type": "web_url",
-							"url": "https://www.biobiochile.cl/noticias/sociedad/animales/2018/03/12/el-gato-mas-triste-de-internet-que-se-ha-vuelto-furor-en-las-redes.shtml",
+							"url": nota.link,
 							"messenger_extensions": false,
 							"webview_height_ratio": "tall"
 						}
@@ -419,7 +418,7 @@ function sendNewsMessage(user_psid, response) {
 			}
 		}
 	};
-	
+
 	let request_body = {
 		"recipient": {
 			"id": user_psid
