@@ -438,7 +438,31 @@ function sendNewsMessage(user_psid, nota) {
 			batch.push(JSON.stringify(object));
 		}
 
+		batch = JSON.stringify(batch);
 		console.log(batch);
+
+		/*request({
+			"uri": "https://graph.facebook.com/v2.8",
+			"method": 'POST',
+			"qs": {
+				"access_token": conf.PROFILE_TOKEN,
+				"batch"
+			}
+		}, (err, res, body) => {
+			if (!err && res.statusCode == 200) {
+				let recipientId = body.recipient_id;
+				let messageId = body.message_id;
+
+				if (messageId) {
+					console.log("Se envió exitosamente el mensaje con el id %s al receptor %s", messageId, recipientId);
+				}else {
+	                console.log("Se estableció comunicación con la Api de envío exitosamente para el receptor %s", recipientId);
+	            }
+			}else {
+				console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
+			}
+		});*/
+		
 	}else {
 		message = {
 			"attachment": {
