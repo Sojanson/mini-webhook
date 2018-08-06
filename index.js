@@ -186,12 +186,15 @@ function messageHandler(evento) {
 			case 'suscripcion':
 				sendGetStarted(sender, "Estos son los tipos de suscripción que puedes elegir");
 				break;
-			case 'dame notas':
-				text = 'todas las categorias';
-				type = 'noticias';
+			case 'ultimas':
+				text = 'Estas son las últimas noticias de tus categorias elegidas';
+				getNotasFromSource((err, result) => {
+					if (err) throw err;
+					console.log(result);
+				})
 				sendTextMessage(sender, text);
 				break;
-		}		
+		}
 	}
 }
 
@@ -247,6 +250,20 @@ function getCategory(slug, callback) {
 		if (err) throw err;
 		callback(null, result[0]);
 		
+	});
+}
+function getNotasFromSource(callback) {
+
+	request({
+		"uri": conf.BBCL_POSTS_URL,
+		"method": "GET",
+		"json": true
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {
+			callback(null, body);			
+		}else {
+			return console.error("Solicitud Fallida", res.statusCode, res.statusMessage, body.error);
+		}
 	});
 }
 
