@@ -187,7 +187,7 @@ function messageHandler(evento) {
 						let notas = [];
 						for (let categoria of categorias) {
 							console.log(categoria);
-							notas.push(JSON.parse(posts[categoria.slug]));
+							notas.push(JSON.stringify(posts[categoria.slug]));
 						}
 
 						sendNewsMessage(sender, notas);
