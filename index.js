@@ -171,15 +171,7 @@ function messageHandler(evento) {
 			case 'tengo un problema':
 				text = 'tranquilein john wein';
 				sendTextMessage(sender, text);
-				break;
-			case 'holi':
-				text = 'holi tenis pololi?';
-				sendTextMessage(sender, text);
-				break;
-			case 'no te cacho':
-				text = 'ta mala esta wea';
-				sendTextMessage(sender, text);
-				break;
+				break;			
 			case 'categorias':
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 				break;
@@ -260,7 +252,7 @@ function getNotasFromSource(callback) {
 		"json": true
 	}, (err, res, body) => {
 		if (!err && res.statusCode == 200) {
-			callback(null, body);			
+			callback(null, body);
 		}else {
 			return console.error("Solicitud Fallida", res.statusCode, res.statusMessage, body.error);
 		}
