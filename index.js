@@ -186,6 +186,7 @@ function messageHandler(evento) {
 					getUserCategories(sender, (err, categorias) => {
 						let notas = [];
 						for (let categoria of categorias) {
+							console.log(categoria);
 							notas.push(posts[categoria]);
 						}
 						console.log(notas);
