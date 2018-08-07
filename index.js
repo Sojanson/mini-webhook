@@ -431,7 +431,7 @@ function sendTextMessage(user_psid, response) {
 function sendNewsMessage(user_psid, nota) {
 	let message;
 	let texto = nota.description == '' ? nota.title : nota.description;
-
+	console.log('al menos llega al callback');
 
 	if (Array.isArray(user_psid)) {
 		/*let batch = '';
@@ -464,9 +464,9 @@ function sendNewsMessage(user_psid, nota) {
 				console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 			}
 		});*/
+		console.log('is array');
 
-		for (let user of user_psid) {
-			console.log(user);
+		for (let user of user_psid) {			
 			message = {
 				"attachment": {
 					"type": "template",
@@ -499,6 +499,7 @@ function sendNewsMessage(user_psid, nota) {
 		}
 		
 	}else {
+		console.log('not array');
 		message = {
 			"attachment": {
 				"type": "template",
