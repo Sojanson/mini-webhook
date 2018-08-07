@@ -487,7 +487,7 @@ function sendNewsMessage(user_psid, nota) {
 		let notas = [];
 		for (let post of nota) {
 			let texto = post.messenger_description == '' ? post.post_title : post.messenger_description;
-			console.log(post);
+			console.log(texto);
 			/*notas.push({
 				"title": post.post_title,
 				"image_url": `https://media.biobiochile.cl/wp-content/uploads/${post.post_image.URL}`,
