@@ -466,6 +466,7 @@ function sendNewsMessage(user_psid, nota) {
 		});*/
 
 		for (let user of user_psid) {
+			console.log(user);
 			message = {
 				"attachment": {
 					"type": "template",
