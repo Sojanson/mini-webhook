@@ -187,7 +187,7 @@ function messageHandler(evento) {
 						let notas = [];
 						for (let categoria of categorias) {
 							console.log(categoria);
-							notas.push(posts[categoria]);
+							notas.push(posts[categoria.slug]);
 						}
 						console.log(notas);
 					});
