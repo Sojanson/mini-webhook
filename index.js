@@ -464,10 +464,11 @@ function sendNewsMessage(user_psid, nota) {
 				console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
 			}
 		});*/
-		console.log('is array');
-		console.log(user);
+		console.log('is array');		
+		console.log(user_psid);
+		for (let user of user_psid) {
+			console.log(user);
 
-		for (let user of user_psid) {			
 			message = {
 				"attachment": {
 					"type": "template",
