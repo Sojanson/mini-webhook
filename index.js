@@ -180,11 +180,18 @@ function messageHandler(evento) {
 				break;
 			case 'ultimas':
 				text = 'Estas son las últimas noticias de tus categorias elegidas';
-				getNotasFromSource((err, result) => {
+				getNotasFromSource((err, posts) => {
 					if (err) throw err;
-					console.log(result);
+					sendTextMessage(sender, text);
+					getUserCategories(sender, (err, categorias) => {
+						let notas = [];
+						for (let categoria of categorias) {
+							notas.push(posts[categoria]);
+						}
+						console.log(notas);
+					});
 				})
-				sendTextMessage(sender, text);
+				
 				break;
 		}
 	}
@@ -242,6 +249,13 @@ function getCategory(slug, callback) {
 		if (err) throw err;
 		callback(null, result[0]);
 		
+	});
+}
+function getUserCategories(user_psid, callback) {
+	let sqlQuery = `SELECT cat_id FROM bot_user_category WHERE subscribed = 1 AND psid = ${user_psid}`;
+	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
+		if (err) throw err;
+		callback(null, result);
 	});
 }
 function getNotasFromSource(callback) {
@@ -431,43 +445,10 @@ function sendTextMessage(user_psid, response) {
 function sendNewsMessage(user_psid, nota) {
 	let message;
 	let texto = nota.description == '' ? nota.title : nota.description;
-	console.log('al menos llega al callback');
 
 	if (Array.isArray(user_psid)) {
-		/*let batch = '';
-		let object = {};
-		for (let user of user_psid) {
-			object = {
-				"method": "POST",
-				"headers": [{"name": "Content-Type", "value": "application/json"}],
-				"relative_url": "me/messages?access_token=" + conf.PROFILE_TOKEN,
-				"body": "recipient%5Bid%5D="+user.psid+"&message%5Battachment%5D%5Btype%5D=template"+texto
-			};
-
-			batch += JSON.stringify(object)+ ",";
-
-		}
-		batch = batch.slice(0, -1);
-		console.log(batch);
 		
-		request({
-			"uri": "https://graph.facebook.com/v2.8",
-			"method": 'POST',
-			"qs": {
-				"access_token": conf.PROFILE_TOKEN,
-				"batch": "[" + batch + "]"
-			}
-		}, (err, res, body) => {
-			if (!err && res.statusCode == 200) {
-	            console.log('exito al enviar el mensaje');
-			}else {
-				console.error("No se estableció la comunicación", res.statusCode, res.statusMessage, body.error);
-			}
-		});*/
-		console.log('is array');		
-		console.log(user_psid);
 		for (let user of user_psid) {
-			console.log(user);
 
 			message = {
 				"attachment": {
