@@ -253,7 +253,7 @@ function getCategory(slug, callback) {
 	});
 }
 function getUserCategories(user_psid, callback) {
-	let sqlQuery = `SELECT cat_id FROM bot_user_category WHERE subscribed = 1 AND psid = ${user_psid}`;
+	let sqlQuery = `SELECT slug FROM bot_user_category AS uc INNER JOIN bot_categories AS cat ON cat.id = uc.cat_id  WHERE subscribed = 1 AND psid = ${user_psid}`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if (err) throw err;
 		callback(null, result);
