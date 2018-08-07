@@ -465,6 +465,7 @@ function sendNewsMessage(user_psid, nota) {
 			}
 		});*/
 		console.log('is array');
+		console.log(user);
 
 		for (let user of user_psid) {			
 			message = {
