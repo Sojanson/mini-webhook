@@ -341,7 +341,7 @@ function subscribeUser(user_psid, suscripcion) {
 					if (err) throw err;
 					console.log('1 fila insertada');
 					if (novo) {sendCategoriasMessage(user_psid);}
-					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!')}
+					else {sendTextMessage(user_psid, 'Tu suscripcion ha sido actualizada!')}
 				});
 				
 			}else {
@@ -365,7 +365,7 @@ function unsubscribeUser(user_psid) {
 				if (err) throw err;
 				console.log('1 fila insertada');
 				if (novo) {sendCategoriasMessage(user_psid);}
-				else {sendTextMessage(user_psid, 'Tu subscripcion ha sido desactivada')}
+				else {sendTextMessage(user_psid, 'Tu suscripcion ha sido desactivada')}
 			});
 
 		}else {
