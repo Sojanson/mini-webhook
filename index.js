@@ -669,13 +669,10 @@ function sendGetStarted(user_psid, response) {
 			"type": "template",
 			"payload": {
 				"template_type": "generic",
-				"text": response,
-
 				"elements": [
-					{
-						"image_url": "",
-						"messenger_extensions": false,
-						"webview_height_ratio": "tall",
+					{	
+						"title": response,
+						"image_url": "",						
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
@@ -683,7 +680,7 @@ function sendGetStarted(user_psid, response) {
 						},*/
 						{
 							"type": "postback",
-							"title": "Recibir al publicar ",
+							"title": "Recibir",
 							"payload": "realtime"
 						},
 						{
