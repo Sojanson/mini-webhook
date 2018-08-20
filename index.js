@@ -440,25 +440,6 @@ function subscribeToCategory(user_psid, categoria) {
 	});
 }
 
-function getUserData(user_psid) {
-	request({
-		"uri": "https://graph.facebook.com/" + user_psid,
-		"method": "GET",
-		"qs": {
-			"fields": "first_name,last_name,profile_pic",
-			"access_token": conf.PROFILE_TOKEN
-		},
-		"json" : true
-	}, (err, res, body) => {
-		if (!err && res.statusCode == 200) {
-			
-			let last_name = user.last_name ? user.last_name : '';
-		}else {
-			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
-		}
-	});
-}
-
 function sendTextMessage(user_psid, response) {
 	let message = '';
 
