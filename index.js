@@ -176,7 +176,7 @@ function messageHandler(evento) {
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 				break;
 			case 'suscripcion':
-				sendGetStarted(sender, "Estos son los tipos de suscripción que puedes elegir");
+				sendGetStarted(sender, "Quieres recibir las noticias de última hora por este medio?");
 				break;
 			case 'ultimas':
 				text = 'Estas son las últimas noticias de tus categorias elegidas';
@@ -212,7 +212,11 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
+			getUserData(sender, function(err, user){
+				if(err) throw err;
+				sendGetStarted(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante`);
+			})
+			
 			break;
 		case 'daily':
 		case 'realtime':
@@ -274,6 +278,32 @@ function getNotasFromSource(callback) {
 			callback(null, body);
 		}else {
 			return console.error("Solicitud Fallida", res.statusCode, res.statusMessage, body.error);
+		}
+	});
+}
+
+function getSavedUser(user_psid, callback) {
+	let sqlQuery = `SELECT name, last_name FROM bot_users WHERE psid = ${user_psid}`;
+	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
+		if (err) throw err;
+		callback(null, result);
+	});
+}
+
+function getUserData(user_psid, callback) {
+	request({
+		"uri": "https://graph.facebook.com/" + user_psid,
+		"method": "GET",
+		"qs": {
+			"fields": "first_name,last_name,profile_pic",
+			"access_token": conf.PROFILE_TOKEN
+		},
+		"json" : true
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {			
+			callback(null, body);
+		}else {
+			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
 		}
 	});
 }
@@ -340,8 +370,8 @@ function subscribeUser(user_psid, suscripcion) {
 				conf.MYSQL.query(sqlQuery, function (err, result){
 					if (err) throw err;
 					console.log('1 fila insertada');
-					if (novo) {sendCategoriasMessage(user_psid);}
-					else {sendTextMessage(user_psid, 'Tu suscripcion ha sido actualizada!')}
+					if (novo) {sendTextMessage(user_psid, 'Te has suscrito');}
+					else {sendTextMessage(user_psid, 'Ya estás suscrito')}
 				});
 				
 			}else {
@@ -638,29 +668,50 @@ function sendCategoriasMessage(user_psid, response) {
 
 function sendGetStarted(user_psid, response) {
 	let message = '';
+
+	/*"elements": [
+		{
+			"title": nota.title,
+			"image_url": nota.image,
+			"subtitle": texto,
+			"default_action": {
+				"type": "web_url",
+				"url": nota.link,
+				"messenger_extensions": false,
+				"webview_height_ratio": "tall"
+			}
+		}
+	]*/
 		
 	message = {
 		"attachment": {
 			"type": "template",
 			"payload": {
-				"template_type": "button",
+				"template_type": "generic",
 				"text": response,
 
-				"buttons": [/*{
-					"type": "postback",
-					"title": "Recibir a diario",
-					"payload": "daily"
-				},*/
-				{
-					"type": "postback",
-					"title": "Recibir al publicar ",
-					"payload": "realtime"
-				},
-				{
-					"type": "postback",
-					"title": "No recibir",
-					"payload": "nope"
-				}]
+				"elements": [
+					{
+						"image_url": "",
+						"messenger_extensions": false,
+						"webview_height_ratio": "tall",
+						"buttons": [/*{
+							"type": "postback",
+							"title": "Recibir a diario",
+							"payload": "daily"
+						},*/
+						{
+							"type": "postback",
+							"title": "Recibir al publicar ",
+							"payload": "realtime"
+						},
+						{
+							"type": "postback",
+							"title": "No recibir",
+							"payload": "nope"
+						}]
+					}
+				]				
 			}
 		}
 	};
