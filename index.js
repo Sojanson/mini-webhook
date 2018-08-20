@@ -646,11 +646,11 @@ function sendGetStarted(user_psid, response) {
 				"template_type": "button",
 				"text": response,
 
-				"buttons": [{
+				"buttons": [/*{
 					"type": "postback",
 					"title": "Recibir a diario",
 					"payload": "daily"
-				},
+				},*/
 				{
 					"type": "postback",
 					"title": "Recibir al publicar ",
