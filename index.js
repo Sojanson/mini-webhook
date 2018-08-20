@@ -212,8 +212,7 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			getUserData(sender, function(err, user){
-				if(err) throw err;
+			getUserData(sender, function(){				
 				//sendGetStarted(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante`);
 			})
 			
