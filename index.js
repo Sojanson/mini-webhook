@@ -391,7 +391,7 @@ function unsubscribeUser(user_psid) {
 		if (err) throw err;
 		if (result.length > 0){
 			console.log('ya existe, desuscribiendo');
-			sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
+			sqlQuery = `DELETE FROM bot_users WHERE psid = '${user_psid}'`;
 			conf.MYSQL.query(sqlQuery, function (err, result){
 				if (err) throw err;
 				console.log('1 fila insertada');
