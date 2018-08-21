@@ -489,7 +489,7 @@ function sendNewsMessage(user_psid, nota) {
 		
 	}else if (Array.isArray(nota)){
 		let notas = [];		
-
+		console.log('ultimas?');
 		for (let post of nota) {
 			console.log(post.post_title);			
 			let texto = post.messenger_description == '' ? post.post_title : post.messenger_description;			
