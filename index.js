@@ -221,6 +221,7 @@ function postbackHandler(evento) {
 			break;
 		case 'daily':
 		case 'realtime':
+		case
 			subscribeUser(sender, payload);
 			break;
 		case 'nope':
@@ -673,7 +674,7 @@ function sendGetStarted(user_psid, response) {
 				"elements": [
 					{	
 						"title": "¿Deseas recibir las noticias?",
-						"image_url": "",						
+						"image_url": "http://placekitten.com/600/320",
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
