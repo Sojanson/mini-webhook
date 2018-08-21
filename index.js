@@ -220,8 +220,7 @@ function postbackHandler(evento) {
 			
 			break;
 		case 'daily':
-		case 'realtime':
-		case
+		case 'realtime':		
 			subscribeUser(sender, payload);
 			break;
 		case 'nope':
