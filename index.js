@@ -394,9 +394,8 @@ function unsubscribeUser(user_psid) {
 			sqlQuery = `DELETE FROM bot_users WHERE psid = '${user_psid}'`;
 			conf.MYSQL.query(sqlQuery, function (err, result){
 				if (err) throw err;
-				console.log('1 fila insertada');
-				if (novo) {sendCategoriasMessage(user_psid);}
-				else {sendTextMessage(user_psid, 'Tu suscripcion ha sido desactivada')}
+				console.log('1 usuario eliminado');
+				sendTextMessage(user_psid, 'Tu suscripcion ha sido desactivada');
 			});
 
 		}else {
