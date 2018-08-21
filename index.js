@@ -182,8 +182,14 @@ function messageHandler(evento) {
 				text = 'Estas son las últimas noticias de tus categorias elegidas';
 				getNotasFromSource((err, posts) => {
 					if (err) throw err;
-					sendTextMessage(sender, text);					
-					sendNewsMessage(sender, posts);
+					sendTextMessage(sender, text);
+					
+					let notas = [];
+					for (let post of posts) {						
+						notas.push(posts[categoria.slug][0]);						
+					}
+
+					sendNewsMessage(sender, notas);
 					
 				})
 				
@@ -489,7 +495,7 @@ function sendNewsMessage(user_psid, nota) {
 		
 	}else if (Array.isArray(nota)){
 		let notas = [];		
-		console.log('ultimas?');
+
 		for (let post of nota) {
 			console.log(post.post_title);			
 			let texto = post.messenger_description == '' ? post.post_title : post.messenger_description;			
