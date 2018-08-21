@@ -182,19 +182,9 @@ function messageHandler(evento) {
 				text = 'Estas son las últimas noticias de tus categorias elegidas';
 				getNotasFromSource((err, posts) => {
 					if (err) throw err;
-					sendTextMessage(sender, text);
-					getUserCategories(sender, (err, categorias) => {
-						let notas = [];
-						for (let categoria of categorias) {
-							console.log(categoria);
-							if(posts[categoria.slug].length) {
-								notas.push(posts[categoria.slug][0]);	
-							}
-							
-						}
-
-						sendNewsMessage(sender, notas);
-					});
+					sendTextMessage(sender, text);					
+					sendNewsMessage(sender, posts);
+					
 				})
 				
 				break;
@@ -247,7 +237,7 @@ function postbackHandler(evento) {
 	}
 }
 function getSubscribedUsers(subscripcion, cat_id, callback) {
-	let sqlQuery = `SELECT uc.psid, cat_id, subscribed, subscription_type FROM bot_user_category AS uc INNER JOIN bot_users AS u ON uc.psid = u.psid  WHERE subscribed = 1 AND subscription_type = '${subscripcion}'`;
+	let sqlQuery = `SELECT psid, subscription_type FROM bot_users WHERE subscription_type = '${subscripcion}'`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if(err) throw err;
 		callback(null, result);
@@ -371,7 +361,7 @@ function subscribeUser(user_psid, suscripcion) {
 				conf.MYSQL.query(sqlQuery, function (err, result){
 					if (err) throw err;
 					console.log('1 fila insertada');
-					if (novo) {sendTextMessage(user_psid, 'Te has suscrito');}
+					if (novo) {sendTextMessage(user_psid, 'Te has suscrito a nuestro feed!');}
 					else {sendTextMessage(user_psid, 'Ya estás suscrito')}
 				});
 				
@@ -391,11 +381,11 @@ function unsubscribeUser(user_psid) {
 		if (err) throw err;
 		if (result.length > 0){
 			console.log('ya existe, desuscribiendo');
-			sqlQuery = `DELETE FROM bot_users WHERE psid = '${user_psid}'`;
+			sqlQuery = `UPDATE bot_users SET subscription_type = 'disabled' WHERE psid = '${user_psid}'`;
 			conf.MYSQL.query(sqlQuery, function (err, result){
 				if (err) throw err;
 				console.log('1 usuario eliminado');
-				sendTextMessage(user_psid, 'Tu suscripcion ha sido desactivada');
+				sendTextMessage(user_psid, 'Ya no estás suscrito a nuestro feed');
 			});
 
 		}else {
