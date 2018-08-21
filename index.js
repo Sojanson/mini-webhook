@@ -172,9 +172,9 @@ function messageHandler(evento) {
 				text = 'tranquilein john wein';
 				sendTextMessage(sender, text);
 				break;
-			case 'categorias':
+			/*case 'categorias':
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
-				break;
+				break;*/
 			case 'suscripcion':
 				sendGetStarted(sender, "Quieres recibir las noticias de última hora por este medio?");
 				break;
@@ -247,7 +247,7 @@ function postbackHandler(evento) {
 	}
 }
 function getSubscribedUsers(subscripcion, cat_id, callback) {
-	let sqlQuery = `SELECT uc.psid, cat_id, subscribed, subscription_type FROM bot_user_category AS uc INNER JOIN bot_users AS u ON uc.psid = u.psid  WHERE subscribed = 1 AND cat_id = ${cat_id} AND subscription_type = '${subscripcion}'`;
+	let sqlQuery = `SELECT uc.psid, cat_id, subscribed, subscription_type FROM bot_user_category AS uc INNER JOIN bot_users AS u ON uc.psid = u.psid  WHERE subscribed = 1 AND subscription_type = '${subscripcion}'`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if(err) throw err;
 		callback(null, result);
@@ -345,7 +345,7 @@ function subscribeUser(user_psid, suscripcion) {
 			console.log('ya existe, actualizando');
 			novo = false;			
 		}else {
-			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
+			console.log('a este tipo no lo he visto ni en pelea de perros, será agregado');
 			novo = true;
 		}
 
@@ -400,7 +400,7 @@ function unsubscribeUser(user_psid) {
 			});
 
 		}else {
-			console.log('a este weon no lo he visto ni en pelea de perros, será ignorado');
+			console.log('a este tipo no lo he visto ni en pelea de perros, será ignorado');
 			sendTextMessage(user_psid, 'No estás suscrito');
 		}		
 	});	
