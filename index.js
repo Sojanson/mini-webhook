@@ -183,14 +183,18 @@ function messageHandler(evento) {
 				getNotasFromSource((err, posts) => {
 					if (err) throw err;
 					sendTextMessage(sender, text);
-					
-					let notas = [];
-					for (let post of JSON.parse(posts) ) {						
-						notas.push(post);
-					}
+					getUserCategories(sender, (err, categorias) => {
+						let notas = [];
+						for (let categoria of categorias) {
+							console.log(categoria);
+							if(posts[categoria.slug].length) {
+								notas.push(posts[categoria.slug][0]);	
+							}
+							
+						}
 
-					sendNewsMessage(sender, notas);
-					
+						sendNewsMessage(sender, notas);
+					});
 				})
 				
 				break;
@@ -258,7 +262,7 @@ function getCategory(slug, callback) {
 	});
 }
 function getUserCategories(user_psid, callback) {
-	let sqlQuery = `SELECT slug FROM bot_user_category AS uc INNER JOIN bot_categories AS cat ON cat.id = uc.cat_id  WHERE subscribed = 1 AND psid = ${user_psid}`;
+	let sqlQuery = `SELECT slug FROM bot_categories`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if (err) throw err;
 		callback(null, result);
