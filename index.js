@@ -185,8 +185,8 @@ function messageHandler(evento) {
 					sendTextMessage(sender, text);
 					
 					let notas = [];
-					for (let post of posts) {						
-						notas.push(posts[categoria.slug][0]);						
+					for (let post of JSON.parse(posts) ) {						
+						notas.push(post);
 					}
 
 					sendNewsMessage(sender, notas);
