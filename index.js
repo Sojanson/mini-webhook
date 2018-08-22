@@ -213,8 +213,7 @@ function postbackHandler(evento) {
 	switch (payload) {
 		case 'get_started':
 			getUserData(sender, function(err, user){
-				if (err) throw err;
-				sendImageMessage(sender);
+				if (err) throw err;				
 				sendGetStarted(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante 😉`);
 			})
 			
@@ -669,21 +668,11 @@ function sendImageMessage(user_psid) {
 }
 
 function sendGetStarted(user_psid, response) {
-	let message = '';
 
-	/*"elements": [
-		{
-			"title": nota.title,
-			"image_url": nota.image,
-			"subtitle": texto,
-			"default_action": {
-				"type": "web_url",
-				"url": nota.link,
-				"messenger_extensions": false,
-				"webview_height_ratio": "tall"
-			}
-		}
-	]*/
+	sendImageMessage(user_psid);
+	sendTextMessage(user_psid, response);
+
+	let message = '';	
 		
 	message = {
 		"attachment": {
@@ -691,8 +680,7 @@ function sendGetStarted(user_psid, response) {
 			"payload": {
 				"template_type": "generic",
 				"elements": [
-					{	
-						"title": response,
+					{							
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
