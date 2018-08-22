@@ -680,7 +680,8 @@ function sendGetStarted(user_psid, response) {
 			"payload": {
 				"template_type": "generic",
 				"elements": [
-					{							
+					{	
+						"title": "¿Deseas Recibir nuestro feed de noticias? 🙂",
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
