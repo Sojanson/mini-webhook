@@ -653,7 +653,7 @@ function sendImageMessage(user_psid, response) {
 	message = {
 		"text": response,
 		"attachment": {
-			"type": "image",
+			"type": "image|text",
 			"payload": {
 				"attachment_id": conf.IMG_GETSTARTED,				
 			}
