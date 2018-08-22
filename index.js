@@ -672,7 +672,7 @@ function sendGetStarted(user_psid, response) {
 				"elements": [
 					{	
 						"title": "¿Deseas recibir las noticias?",
-						"image_url": "http://placekitten.com/600/320",
+						"image_url": "https://biobiochile.cl/assets/bot-messenger/SALUDO.gif",
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
