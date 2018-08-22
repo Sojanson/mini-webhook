@@ -214,7 +214,7 @@ function postbackHandler(evento) {
 		case 'get_started':
 			getUserData(sender, function(err, user){
 				if (err) throw err;
-				sendTextMessage(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante 😉`);
+				sendImageMessage(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante 😉`);
 				sendGetStarted(sender, '');
 			})
 			
@@ -647,6 +647,28 @@ function sendCategoriasMessage(user_psid, response) {
 	callSendApi(request_body);
 }
 
+function sendImageMessage(user_psid, response) {
+	let message = '';
+
+	message = {
+		"attachment": {
+			"type": "image",
+			"payload": {
+				"attachment_id": conf.IMG_GETSTARTED,
+				"text" : response
+			}
+		}
+	};
+
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+	callSendApi(request_body);
+}
+
 function sendGetStarted(user_psid, response) {
 	let message = '';
 
@@ -671,8 +693,7 @@ function sendGetStarted(user_psid, response) {
 				"template_type": "generic",
 				"elements": [
 					{	
-						"title": "¿Deseas recibir las noticias?",
-						"image_url": "https://biobiochile.cl/assets/bot-messenger/SALUDO.gif",
+						"title": "¿Deseas recibir las noticias?",						
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
