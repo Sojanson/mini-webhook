@@ -213,8 +213,10 @@ function postbackHandler(evento) {
 	switch (payload) {
 		case 'get_started':
 			getUserData(sender, function(err, user){
-				if (err) throw err;				
-				sendGetStarted(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante 😉`);
+				if (err) throw err;
+				sendImageMessage(user_psid);
+				sendTextMessage(user_psid, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante 😉`);
+				sendGetStarted(sender, '¿Deseas Recibir nuestro feed de noticias? 🙂');
 			})
 			
 			break;
@@ -668,10 +670,6 @@ function sendImageMessage(user_psid) {
 }
 
 function sendGetStarted(user_psid, response) {
-
-	sendImageMessage(user_psid);
-	sendTextMessage(user_psid, response);
-
 	let message = '';	
 		
 	message = {
@@ -681,7 +679,7 @@ function sendGetStarted(user_psid, response) {
 				"template_type": "generic",
 				"elements": [
 					{	
-						"title": "¿Deseas Recibir nuestro feed de noticias? 🙂",
+						"title": response,
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
