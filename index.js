@@ -647,7 +647,7 @@ function sendCategoriasMessage(user_psid, response) {
 	callSendApi(request_body);
 }
 
-function sendImageMessage(user_psid, response) {
+function sendImageMessage(user_psid) {
 	let message = '';
 
 	message = {		
@@ -692,7 +692,7 @@ function sendGetStarted(user_psid, response) {
 				"template_type": "generic",
 				"elements": [
 					{	
-						"title": response,						
+						"title": response,
 						"buttons": [/*{
 							"type": "postback",
 							"title": "Recibir a diario",
