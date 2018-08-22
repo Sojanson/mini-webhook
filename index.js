@@ -651,6 +651,7 @@ function sendImageMessage(user_psid, response) {
 	let message = '';
 
 	message = {
+		"text": response,
 		"attachment": {
 			"type": "image",
 			"payload": {
