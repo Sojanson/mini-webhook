@@ -71,9 +71,9 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 				
-				getSubscribedUsers('realtime', body.categoria, function(err, result){
+				/*getSubscribedUsers('realtime', body.categoria, function(err, result){
 					sendNewsMessage(result, body);
-				});
+				});*/
 
 			});
 		}
@@ -373,7 +373,11 @@ function subscribeUser(user_psid, suscripcion) {
 					if (err) throw err;
 					console.log('1 fila insertada');
 					if (novo) {sendTextMessage(user_psid, 'Te has suscrito a nuestro feed!');}
-					else {sendTextMessage(user_psid, 'Ya estás suscrito')}
+					else {
+						sendTextMessage(user_psid, 'Se ha actualizado tu suscripción');
+
+					}
+					sendTextMessage(user_psid, '')
 				});
 				
 			}else {
