@@ -221,7 +221,7 @@ function postbackHandler(evento) {
 			
 			break;
 		case 'daily':
-		case 'realtime':		
+		case 'realtime':
 			subscribeUser(sender, payload);
 			break;
 		case 'nope':
@@ -377,7 +377,7 @@ function subscribeUser(user_psid, suscripcion) {
 						sendTextMessage(user_psid, 'Se ha actualizado tu suscripción');
 
 					}
-					sendTextMessage(user_psid, '')
+					sendTextMessage(user_psid, 'Ahora recibiras noticias nuestras en cuanto ocurra algo importante 😊');
 				});
 				
 			}else {
