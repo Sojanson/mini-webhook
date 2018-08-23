@@ -468,6 +468,7 @@ function sendNewsMessage(user_psid, nota) {
 
 	if (Array.isArray(user_psid)) {
 		let texto = nota.description == '' ? nota.excerpt : nota.description;
+		console.log(texto);
 		texto = texto == '' ? nota.title : texto;
 
 		console.log(texto);
