@@ -467,12 +467,7 @@ function sendNewsMessage(user_psid, nota) {
 	let message;
 
 	if (Array.isArray(user_psid)) {
-		let texto = nota.description == '' ? nota.excerpt : nota.description;
-		console.log(texto);
-		texto = texto == '' ? nota.title : texto;
-
-		console.log(texto);
-		/*
+		let texto = nota.description == '' ? nota.excerpt =  : nota.description;
 		
 		for (let user of user_psid) {
 
@@ -505,18 +500,18 @@ function sendNewsMessage(user_psid, nota) {
 				"message": message
 			};
 			callSendApi(request_body);
-		}*/
+		}
 		
 	}else if (Array.isArray(nota)){
 		let notas = [];		
 
 		for (let post of nota) {
 			console.log(post.post_title);			
-			let texto = post.messenger_description == '' ? post.excerpt : post.messenger_description;			
+			let texto = post.messenger_description == '' ? post.post_excerpt : post.messenger_description;			
 			notas.push({
 				"title": post.post_title,
 				"image_url": `https://media.biobiochile.cl/wp-content/uploads/${post.post_image.URL}`,
-				"subtitle": '',
+				"subtitle": texto,
 				"default_action": {
 					"type": "web_url",
 					"url": post.post_URL,
