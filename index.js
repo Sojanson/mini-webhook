@@ -512,11 +512,11 @@ function sendNewsMessage(user_psid, nota) {
 
 		for (let post of nota) {
 			console.log(post.post_title);			
-			let texto = post.messenger_description == '' ? post.post_title : post.messenger_description;			
+			let texto = post.messenger_description == '' ? post.excerpt : post.messenger_description;			
 			notas.push({
 				"title": post.post_title,
 				"image_url": `https://media.biobiochile.cl/wp-content/uploads/${post.post_image.URL}`,
-				"subtitle": texto,
+				"subtitle": '',
 				"default_action": {
 					"type": "web_url",
 					"url": post.post_URL,
