@@ -71,9 +71,9 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 				
-				/*getSubscribedUsers('realtime', body.categoria, function(err, result){
+				getSubscribedUsers('realtime', body.categoria, function(err, result){
 					sendNewsMessage(result, body);
-				});*/
+				});
 
 			});
 		}
@@ -467,7 +467,11 @@ function sendNewsMessage(user_psid, nota) {
 	let message;
 
 	if (Array.isArray(user_psid)) {
-		let texto = nota.description == '' ? nota.title : nota.description;
+		let texto = nota.description == '' ? nota.excerpt : nota.description;
+		texto = texto == '' ? nota.title : texto;
+
+		console.log(texto);
+		/*
 		
 		for (let user of user_psid) {
 
@@ -500,7 +504,7 @@ function sendNewsMessage(user_psid, nota) {
 				"message": message
 			};
 			callSendApi(request_body);
-		}
+		}*/
 		
 	}else if (Array.isArray(nota)){
 		let notas = [];		
