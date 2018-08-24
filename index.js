@@ -467,12 +467,13 @@ function sendNewsMessage(user_psid, nota) {
 	let message;
 
 	if (Array.isArray(user_psid)) {
-
-		if (nota.description != '') {
-			sendTextMessage(user_psid, nota.description);
-		}
+		
 		
 		for (let user of user_psid) {
+
+			if (nota.description != '') {
+				sendTextMessage(user.psid, nota.description);
+			}
 
 			message = {
 				"attachment": {
