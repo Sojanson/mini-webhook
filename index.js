@@ -357,7 +357,7 @@ function subscribeUser(user_psid, suscripcion) {
 			}
 
 			conf.MYSQL.query(sqlQuery, function (err, result) {
-				console.log(`la suscripcion del usuario ${name} ${las_name} ha sido actualizada a ${suscripcion}`);
+				console.log(`la suscripcion del usuario ${name} ${last_name} ha sido actualizada a ${suscripcion}`);
 				sendTextMessage(user_psid, '¡Ya estás suscrito!');
 				sendTextMessage(user_psid, 'Te enviaremos una alerta cuando ocurra algo importante 🙂');
 			});
