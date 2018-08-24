@@ -286,24 +286,6 @@ function getNotasFromSource(callback) {
 	});
 }
 
-function getUserData(user_psid, callback) {
-	request({
-		"uri": "https://graph.facebook.com/" + user_psid,
-		"method": "GET",
-		"qs": {
-			"fields": "first_name,last_name,profile_pic",
-			"access_token": conf.PROFILE_TOKEN
-		},
-		"json" : true
-	}, (err, res, body) => {
-		if (!err && res.statusCode == 200) {			
-			callback(null, body);
-		}else {
-			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
-		}
-	});
-}
-
 function callSendApi(data) {
 	request({
 		"uri": conf.FB_MESSAGE_URL,
@@ -336,17 +318,51 @@ function getSavedUser(user_psid, callback) {
 	});
 }
 
+function getUserData(user_psid, callback) {
+	request({
+		"uri": "https://graph.facebook.com/" + user_psid,
+		"method": "GET",
+		"qs": {
+			"fields": "first_name,last_name,profile_pic",
+			"access_token": conf.PROFILE_TOKEN
+		},
+		"json" : true
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {			
+			callback(null, body);
+		}else {
+			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
+		}
+	});
+}
+
 function subscribeUser(user_psid, suscripcion) {		
 
 	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 	let sqlQuery = '';
-	let novo = true;
 
 	getSavedUser(user_psid,(err, user) => {
-		if (err) throw error;
-		if (user.length > 0){
-			console.log('ya existe, actualizando');
-		}
+		if (err) throw err;
+		getUserData(user_psid, (err, user_data) => {
+
+			let name = user_data.first_name ? user_data.first_name : '';
+			let last_name = user_data.last_name ? user_data.last_name : '';
+			
+			if (user.length > 0){
+				console.log('ya existe, actualizando');
+				sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
+			}else {
+				console.log('a este tipo no lo he visto ni en pelea de perros, será agregado');
+				sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;				
+			}
+
+			conf.MYSQL.query(sqlQuery, function (err, result) {
+				console.log(`la suscripcion del usuario ${name} ${las_name} ha sido actualizada a ${suscripcion}`);
+				sendTextMessage(user_psid, '¡Ya estás suscrito!');
+				sendTextMessage(user_psid, 'Te enviaremos una alerta cuando ocurra algo importante 🙂');
+			});
+
+		});
 	})
 
 	/*
