@@ -232,12 +232,7 @@ function messageHandler(evento) {
 			default:
 				getSavedUser(sender, (err, users) => {
 					if (users.length > 0 && users[0].ayuda == 1) {
-						sendTextMessage(sender, '¿De casualidad quisiste realizar alguna acción relacionada con el bot? \n'
-							+ 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:');
-						sendTextMessage(sender, '"suscripción" o "suscripcion" : Muestra el menú de selección de suscripción.\n'
-							+ '"últimas" o "últimas" : Muestra un listado de las noticias de importancia más recientes\n'
-							+ '"ayuda" : Muestra el listado de comandos que se pueden realizar');
-						sendTextMessage(sender, 'Y eso es todo por ahora, si quieres desactivar este mensaje, solo escribe "ayuda:off" o "ayuda:on" para lo contrario.')
+						sendTextMessage(sender, 'Si ya no quieres recibir más mensajes, escribe la palabra "suscripción" y selecciona "No recibir"');
 					}
 				}); 
 				
