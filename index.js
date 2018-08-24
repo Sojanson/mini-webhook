@@ -72,7 +72,7 @@ app.post('/nota', (req, res) => {
 				console.log('nota insertada');
 				
 				getSubscribedUsers('realtime', body.categoria, function(err, result){					
-					sendNewsMessage([{psid: 2214930515203317, subscription_type: "realtime"}], body);
+					sendNewsMessage([{psid: "2214930515203317", subscription_type: "realtime"}], body);
 				});
 
 			});
