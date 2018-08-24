@@ -178,7 +178,7 @@ function messageHandler(evento) {
 			case 'suscripcion':
 				sendGetStarted(sender, "Quieres recibir las noticias de última hora por este medio?");
 				break;
-			case 'ultimas':
+			case 'últimas':
 				text = 'Estas son las noticias de última hora más recientes';
 				getNotasFromSource((err, posts) => {
 					if (err) throw err;
