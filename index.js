@@ -161,7 +161,7 @@ function messageHandler(evento) {
 	if (message) {
 		switch (message.toLowerCase()) {
 			case 'hola':
-				text = 'hola';
+				text = 'Hola 🙂 Te enviaremos una alerta cuando ocurra algo importante.';
 				sendTextMessage(sender, text);
 				break;
 			case 'matate':
@@ -198,10 +198,12 @@ function messageHandler(evento) {
 				})
 			case 'ayuda':
 				sendTextMessage(sender, '¿Necesitas ayuda? \n'
-							+ 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:');
-				sendTextMessage(sender, '"suscripción" o "suscripcion" : Muestra el menú de selección de suscripción.\n'
-							+ '"últimas" o "últimas" : Muestra un listado de las noticias de importancia más recientes\n'
-							+ '"ayuda" : Muestra el listado de comandos que se pueden realizar');
+							+ );
+				sendTextMessage(sender, 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:\n\n'
+							+ '"suscripción" o "suscripcion" : Muestra el menú de selección de suscripción.\n\n'
+							+ '"últimas" o "últimas" : Muestra un listado de las noticias de importancia más recientes\n\n'
+							+ '"ayuda" : Muestra el listado de comandos que se pueden realizar\n\n'
+							+ '"ayuda:off" : Si quieres desactivar el mensaje automático al ingresar \'no comando\'');
 				break;
 			case 'ayuda:off':
 				getSavedUser(sender, (err, user) => {
