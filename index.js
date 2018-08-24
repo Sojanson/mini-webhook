@@ -286,14 +286,6 @@ function getNotasFromSource(callback) {
 	});
 }
 
-function getSavedUser(user_psid, callback) {
-	let sqlQuery = `SELECT name, last_name FROM bot_users WHERE psid = ${user_psid}`;
-	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
-		if (err) throw err;
-		callback(null, result);
-	});
-}
-
 function getUserData(user_psid, callback) {
 	request({
 		"uri": "https://graph.facebook.com/" + user_psid,
@@ -336,17 +328,34 @@ function callSendApi(data) {
 	});
 }
 
+function getSavedUser(user_psid, callback) {
+	let sqlQuery = `SELECT psid, name, last_name FROM bot_users WHERE psid = ${user_psid}`;
+	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
+		if (err) throw err;
+		callback(null, result);
+	});
+}
+
 function subscribeUser(user_psid, suscripcion) {		
 
 	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 	let sqlQuery = '';
 	let novo = true;
 
+	getSavedUser(user_psid,(err, user) => {
+		if (err) throw error;
+		if (user.length > 0){
+			console.log('ya existe, actualizando');
+		}
+	})
+
+	/*
+
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
 			console.log('ya existe, actualizando');
-			novo = false;			
+			novo = false;
 		}else {
 			console.log('a este tipo no lo he visto ni en pelea de perros, será agregado');
 			novo = true;
@@ -387,7 +396,8 @@ function subscribeUser(user_psid, suscripcion) {
 			}
 		});
 		
-	});	
+	});
+	*/
 }
 function unsubscribeUser(user_psid) {
 
