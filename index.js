@@ -230,8 +230,8 @@ function messageHandler(evento) {
 				
 				break;
 			default:
-				getSavedUser(sender, (err, user) => {
-					if (user.length > 0) {
+				getSavedUser(sender, (err, users) => {
+					if (users.length > 0 && users[0].ayuda == 1) {
 						sendTextMessage(sender, '¿De casualidad quisiste realizar alguna acción relacionada con el bot? \n'
 							+ 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:');
 						sendTextMessage(sender, '"suscripción" o "suscripcion" : Muestra el menú de selección de suscripción.\n'
@@ -363,7 +363,7 @@ function callSendApi(data) {
 }
 
 function getSavedUser(user_psid, callback) {
-	let sqlQuery = `SELECT psid, name, last_name FROM bot_users WHERE psid = ${user_psid}`;
+	let sqlQuery = `SELECT psid, name, last_name, ayuda FROM bot_users WHERE psid = ${user_psid}`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if (err) throw err;
 		callback(null, result);
