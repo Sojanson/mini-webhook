@@ -177,6 +177,8 @@ function messageHandler(evento) {
 				break;*/
 			case 'suscripcion':
 			case 'suscripción':
+			case 'alertas':
+			case 'Alertas':
 				sendGetStarted(sender, "¿Quieres recibir las noticias más importantes por este medio?");
 				break;
 			case 'últimas':
@@ -233,7 +235,7 @@ function messageHandler(evento) {
 			default:
 				getSavedUser(sender, (err, users) => {
 					if (users.length > 0 && users[0].ayuda == 1) {
-						sendTextMessage(sender, 'Si ya no quieres recibir más mensajes, escribe la palabra "suscripción" y selecciona "No recibir"');
+						sendTextMessage(sender, 'Si ya no quieres recibir más noticias, escribe "Alertas" y selecciona "No Recibir".');
 					}
 				}); 
 				
@@ -412,56 +414,7 @@ function subscribeUser(user_psid, suscripcion) {
 
 		});
 	})
-
-	/*
-
-	conf.MYSQL.query(select, function (err, result, fields){
-		if (err) throw err;
-		if (result.length > 0){
-			console.log('ya existe, actualizando');
-			novo = false;
-		}else {
-			console.log('a este tipo no lo he visto ni en pelea de perros, será agregado');
-			novo = true;
-		}
-
-		request({
-			"uri": "https://graph.facebook.com/" + user_psid,
-			"method": "GET",
-			"qs": {
-				"fields": "first_name,last_name,profile_pic",
-				"access_token": conf.PROFILE_TOKEN
-			},
-			"json" : true
-		}, (err, res, body) => {
-			if (!err && res.statusCode == 200) {
-				let name = body.first_name ? body.first_name : '';
-				let last_name = body.last_name ? body.last_name : '';
-
-				if (novo) {
-					sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
-				}else {
-					sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
-				}
-
-				conf.MYSQL.query(sqlQuery, function (err, result){
-					if (err) throw err;
-					console.log('1 fila insertada');
-					if (novo) {sendTextMessage(user_psid, '¡Ya estás suscrito!');}
-					else {
-						sendTextMessage(user_psid, '¡Ya estás suscrito!');
-
-					}
-					sendTextMessage(user_psid, 'Te enviaremos una alerta cuando ocurra algo importante 🙂');
-				});
-				
-			}else {
-				return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
-			}
-		});
-		
-	});
-	*/
+	
 }
 function unsubscribeUser(user_psid) {
 
@@ -476,12 +429,12 @@ function unsubscribeUser(user_psid) {
 			conf.MYSQL.query(sqlQuery, function (err, result){
 				if (err) throw err;
 				console.log('1 usuario eliminado');
-				sendTextMessage(user_psid, 'Ya no estás suscrito a nuestro feed');
+				sendTextMessage(user_psid, '¡Lástima! Ya no recibirás más noticias. Pero si cambias de opinión, sólo escribe "Alertas".');
 			});
 
 		}else {
 			console.log('a este tipo no lo he visto ni en pelea de perros, será ignorado');
-			sendTextMessage(user_psid, 'No estás suscrito');
+			sendTextMessage(user_psid, 'Ya no estás suscrito');
 		}		
 	});	
 }
