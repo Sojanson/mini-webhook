@@ -71,8 +71,8 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 				
-				getSubscribedUsers('realtime', body.categoria, function(err, result){
-					sendNewsMessage(result, body);
+				getSubscribedUsers('realtime', body.categoria, function(err, result){					
+					sendNewsMessage([{psid: 2214930515203317, subscription_type: "realtime"}], body);
 				});
 
 			});
@@ -372,12 +372,12 @@ function subscribeUser(user_psid, suscripcion) {
 				conf.MYSQL.query(sqlQuery, function (err, result){
 					if (err) throw err;
 					console.log('1 fila insertada');
-					if (novo) {sendTextMessage(user_psid, 'Te has suscrito a nuestro feed!');}
+					if (novo) {sendTextMessage(user_psid, '¡Ya estás suscrito!');}
 					else {
-						sendTextMessage(user_psid, 'Se ha actualizado tu suscripción');
+						sendTextMessage(user_psid, '¡Ya estás suscrito!');
 
 					}
-					sendTextMessage(user_psid, 'Ahora recibiras noticias nuestras en cuanto ocurra algo importante 😊');
+					sendTextMessage(user_psid, 'Te enviaremos una alerta cuando ocurra algo importante 🙂');
 				});
 				
 			}else {
@@ -467,7 +467,10 @@ function sendNewsMessage(user_psid, nota) {
 	let message;
 
 	if (Array.isArray(user_psid)) {
-		let texto = nota.description == '' ? nota.excerpt : nota.description;
+
+		if (nota.description != '') {
+			sendTextMessage(user_psid, nota.description);
+		}
 		
 		for (let user of user_psid) {
 
@@ -480,7 +483,7 @@ function sendNewsMessage(user_psid, nota) {
 							{
 								"title": nota.title,
 								"image_url": nota.image,
-								"subtitle": texto,
+								"subtitle": nota.excerpt,
 								"default_action": {
 									"type": "web_url",
 									"url": nota.link,
@@ -505,13 +508,11 @@ function sendNewsMessage(user_psid, nota) {
 	}else if (Array.isArray(nota)){
 		let notas = [];		
 
-		for (let post of nota) {
-			console.log(post.post_title);			
-			let texto = post.messenger_description == '' ? post.post_excerpt : post.messenger_description;			
+		for (let post of nota) {			
 			notas.push({
 				"title": post.post_title,
 				"image_url": `https://media.biobiochile.cl/wp-content/uploads/${post.post_image.URL}`,
-				"subtitle": texto,
+				"subtitle": post.post_excerpt,
 				"default_action": {
 					"type": "web_url",
 					"url": post.post_URL,
