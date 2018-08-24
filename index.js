@@ -177,7 +177,7 @@ function messageHandler(evento) {
 				break;*/
 			case 'suscripcion':
 			case 'suscripción':
-				sendGetStarted(sender, "Quieres recibir las noticias de última hora por este medio?");
+				sendGetStarted(sender, "¿Quieres recibir las noticias más importantes por este medio?");
 				break;
 			case 'últimas':
 			case 'ultimas':
@@ -190,16 +190,59 @@ function messageHandler(evento) {
 						for (let categoria of categorias) {
 							console.log(categoria);
 							if(posts[categoria.slug].length) {
-								notas.push(posts[categoria.slug][0]);	
-							}
-							
+								notas.push(posts[categoria.slug][0]);
+							}							
 						}
-
 						sendNewsMessage(sender, notas);
 					});
 				})
+			case 'ayuda':
+				sendTextMessage(user_psid, '¿Necesitas ayuda? \n'
+							+ 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:');
+				sendTextMessage(user_psid, '"suscripción" o "suscripcion" : Muestra el menú de selección de suscripción.\n'
+							+ '"últimas" o "últimas" : Muestra un listado de las noticias de importancia más recientes\n'
+							+ '"ayuda" : Muestra el listado de comandos que se pueden realizar');
+				break;
+			case 'ayuda:off':
+				getSavedUser(user_psid, (err, user) => {
+					if(user.length > 0) {
+						setAyuda(user_psid, 0, (err, result) => {
+							if(err) throw err;
+							sendTextMessage(user_psid, 'Se ha desactivado el mensaje automático de ayuda 🙂');
+						});
+					}else {
+						sendTextMessage(user_psid, 'No estás suscrito al bot actualmente');
+					}
+				})
+
+				break;
+			case 'ayuda:on':
+				getSavedUser(user_psid, (err, user) => {
+					if(user.length > 0) {
+						setAyuda(user_psid, 1, (err, result) => {
+							if(err) throw err;
+							sendTextMessage(user_psid, 'Se ha activado el mensaje automático de ayuda 🙂');
+						});
+					}else {
+						sendTextMessage(user_psid, 'No estás suscrito al bot actualmente');
+					}
+				})
 				
 				break;
+			default:
+				getSavedUser(user_psid, (err, user) => {
+					if (user.length > 0) {
+						sendTextMessage(user_psid, '¿De casualidad quisiste realizar alguna acción relacionada con el bot? \n'
+							+ 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:');
+						sendTextMessage(user_psid, '"suscripción" o "suscripcion" : Muestra el menú de selección de suscripción.\n'
+							+ '"últimas" o "últimas" : Muestra un listado de las noticias de importancia más recientes\n'
+							+ '"ayuda" : Muestra el listado de comandos que se pueden realizar');
+						sendTextMessage(user_psid, 'Y eso es todo por ahora, si quieres desactivar este mensaje, solo escribe "ayuda:off" o "ayuda:on" para lo contrario.')
+					}
+				}); 
+				
+				break;
+
 		}
 	}
 }
@@ -283,6 +326,15 @@ function getNotasFromSource(callback) {
 		}else {
 			return console.error("Solicitud Fallida", res.statusCode, res.statusMessage, body.error);
 		}
+	});
+}
+
+function setAyuda(user_psid, value, callback) {
+	let sqlQuery = `UPDATE bot_users SET ayuda = ${value} WHERE psid = ${user_psid}`;
+
+	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
+		if (err) throw err;
+		callback(null, result);
 	});
 }
 
