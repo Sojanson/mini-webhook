@@ -176,6 +176,7 @@ function messageHandler(evento) {
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
 				break;*/
 			case 'suscripcion':
+			case 'suscripción':
 				sendGetStarted(sender, "Quieres recibir las noticias de última hora por este medio?");
 				break;
 			case 'últimas':
