@@ -198,6 +198,7 @@ function messageHandler(evento) {
 						sendNewsMessage(sender, notas);
 					});
 				})
+				break;
 			case 'ayuda':
 				sendTextMessage(sender, '¿Necesitas ayuda? \n');
 				sendTextMessage(sender, 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:\n\n'
