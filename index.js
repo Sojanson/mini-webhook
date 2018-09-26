@@ -12,8 +12,8 @@ const
 	conf = require('./config.js');
 
 let options = {
-	key: fs.readFileSync('/etc/letsencrypt/live/desarrollobbcl.cl/privkey.pem'),
-	cert: fs.readFileSync('/etc/letsencrypt/live/desarrollobbcl.cl/fullchain.pem')
+	key: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/privkey.pem'),
+	cert: fs.readFileSync('/etc/letsencrypt/live/sojansons.com/fullchain.pem')
 };
 
 // Sets server port and logs message on success
@@ -71,8 +71,8 @@ app.post('/nota', (req, res) => {
 				if (err) throw err;
 				console.log('nota insertada');
 				
-				getSubscribedUsers('realtime', body.categoria, function(err, result){					
-					sendNewsMessage(result, body);
+				buildBatchRequest(body.categoria, function(err, result){
+					sendNewsMessage(result[0].psid, body);
 				});
 
 			});
@@ -161,7 +161,7 @@ function messageHandler(evento) {
 	if (message) {
 		switch (message.toLowerCase()) {
 			case 'hola':
-				text = 'Hola 🙂 Te enviaremos una alerta cuando ocurra algo importante.';
+				text = 'hola';
 				sendTextMessage(sender, text);
 				break;
 			case 'matate':
@@ -172,77 +172,23 @@ function messageHandler(evento) {
 				text = 'tranquilein john wein';
 				sendTextMessage(sender, text);
 				break;
-			/*case 'categorias':
+			case 'holi':
+				text = 'holi tenis pololi?';
+				sendTextMessage(sender, text);
+				break;
+			case 'no te cacho':
+				text = 'ta mala esta wea';
+				sendTextMessage(sender, text);
+				break;
+			case 'categorias':
 				sendCategoriasMessage(sender, "Estas son las categorías que puedes elegir para tu feed");
-				break;*/
-			case 'suscripcion':
-			case 'suscripción':
-			case 'alertas':
-			case 'Alertas':
-				sendGetStarted(sender, "¿Quieres recibir las noticias más importantes por este medio?");
 				break;
-			case 'últimas':
-			case 'ultimas':
-				text = 'Estas son las noticias de última hora más recientes';
-				getNotasFromSource((err, posts) => {
-					if (err) throw err;
-					sendTextMessage(sender, text);
-					getUserCategories(sender, (err, categorias) => {
-						let notas = [];
-						for (let categoria of categorias) {
-							console.log(categoria);
-							if(posts[categoria.slug].length) {
-								notas.push(posts[categoria.slug][0]);
-							}							
-						}
-						sendNewsMessage(sender, notas);
-					});
-				})
+			case 'dame notas':
+				text = 'todas las categorias';
+				type = 'noticias';
+				sendTextMessage(sender, text);
 				break;
-			case 'ayuda':
-				sendTextMessage(sender, '¿Necesitas ayuda? \n');
-				sendTextMessage(sender, 'Si es así este es el (por ahora pequeño) listado de comandos que puedes escribir para interactuar con nosotros:\n\n'
-							+ '"suscripción" : Muestra el menú de selección de suscripción.\n\n'
-							+ '"últimas"	 : Muestra un listado de las noticias de importancia más recientes\n\n'
-							+ '"ayuda" 		 : Muestra el listado de comandos que se pueden realizar\n\n'
-							+ '"ayuda:off" 	 : Si quieres desactivar el mensaje automático al ingresar un \'no comando\'');
-				break;
-			case 'ayuda:off':
-				getSavedUser(sender, (err, user) => {
-					if(user.length > 0) {
-						setAyuda(sender, 0, (err, result) => {
-							if(err) throw err;
-							sendTextMessage(sender, 'Se ha desactivado el mensaje automático de ayuda 🙂');
-						});
-					}else {
-						sendTextMessage(sender, 'No estás suscrito al bot actualmente');
-					}
-				})
-
-				break;
-			case 'ayuda:on':
-				getSavedUser(sender, (err, user) => {
-					if(user.length > 0) {
-						setAyuda(sender, 1, (err, result) => {
-							if(err) throw err;
-							sendTextMessage(sender, 'Se ha activado el mensaje automático de ayuda 🙂');
-						});
-					}else {
-						sendTextMessage(sender, 'No estás suscrito al bot actualmente');
-					}
-				})
-				
-				break;
-			default:
-				getSavedUser(sender, (err, users) => {
-					if (users.length > 0 && users[0].ayuda == 1) {
-						sendTextMessage(sender, 'Si ya no quieres recibir más noticias, escribe "Alertas" y selecciona "No Recibir".');
-					}
-				}); 
-				
-				break;
-
-		}
+		}		
 	}
 }
 
@@ -256,20 +202,14 @@ function postbackHandler(evento) {
 
 	switch (payload) {
 		case 'get_started':
-			getUserData(sender, function(err, user){
-				if (err) throw err;
-				sendImageMessage(sender);
-				sendTextMessage(sender, `¡Hola ${user.first_name}! Bienvenido al sistema de alerta de noticias de BBCL. Por favor confirma que quieres recibir nuestras informaciones. Te prometemos que sólo te avisaremos cuando debas saber algo importante 😉`);
-				sendGetStarted(sender, '¿Deseas Recibir nuestro feed de noticias?');
-			})
-			
+			sendGetStarted(sender, "Bienvenido al bot BBCL! ¿Quieres suscribirte para recibir noticias?");
 			break;
 		case 'daily':
 		case 'realtime':
 			subscribeUser(sender, payload);
 			break;
 		case 'nope':
-			unsubscribeUser(sender);
+			sendTextMessage(sender, "desactivado");
 			break;
 		case 'group-nacional':
 		case 'group-internacional':
@@ -291,8 +231,8 @@ function postbackHandler(evento) {
 
 	}
 }
-function getSubscribedUsers(subscripcion, cat_id, callback) {
-	let sqlQuery = `SELECT psid, subscription_type FROM bot_users WHERE subscription_type = '${subscripcion}'`;
+function buildBatchRequest(cat_id, callback) {
+	let sqlQuery = `SELECT psid, cat_id, subscribed FROM bot_user_category WHERE subscribed = 1 AND cat_id = ${cat_id}`;
 	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
 		if(err) throw err;
 		callback(null, result);
@@ -304,36 +244,6 @@ function getCategory(slug, callback) {
 		if (err) throw err;
 		callback(null, result[0]);
 		
-	});
-}
-function getUserCategories(user_psid, callback) {
-	let sqlQuery = `SELECT slug FROM bot_categories`;
-	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
-		if (err) throw err;
-		callback(null, result);
-	});
-}
-function getNotasFromSource(callback) {
-
-	request({
-		"uri": conf.BBCL_POSTS_URL,
-		"method": "GET",
-		"json": true
-	}, (err, res, body) => {
-		if (!err && res.statusCode == 200) {
-			callback(null, body);
-		}else {
-			return console.error("Solicitud Fallida", res.statusCode, res.statusMessage, body.error);
-		}
-	});
-}
-
-function setAyuda(user_psid, value, callback) {
-	let sqlQuery = `UPDATE bot_users SET ayuda = ${value} WHERE psid = ${user_psid}`;
-
-	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
-		if (err) throw err;
-		callback(null, result);
 	});
 }
 
@@ -361,82 +271,53 @@ function callSendApi(data) {
 	});
 }
 
-function getSavedUser(user_psid, callback) {
-	let sqlQuery = `SELECT psid, name, last_name, ayuda FROM bot_users WHERE psid = ${user_psid}`;
-	conf.MYSQL.query(sqlQuery, (err, result, fields) => {
-		if (err) throw err;
-		callback(null, result);
-	});
-}
-
-function getUserData(user_psid, callback) {
-	request({
-		"uri": "https://graph.facebook.com/" + user_psid,
-		"method": "GET",
-		"qs": {
-			"fields": "first_name,last_name,profile_pic",
-			"access_token": conf.PROFILE_TOKEN
-		},
-		"json" : true
-	}, (err, res, body) => {
-		if (!err && res.statusCode == 200) {			
-			callback(null, body);
-		}else {
-			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
-		}
-	});
-}
-
 function subscribeUser(user_psid, suscripcion) {		
 
 	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
 	let sqlQuery = '';
-
-	getSavedUser(user_psid,(err, user) => {
-		if (err) throw err;
-		getUserData(user_psid, (err, user_data) => {
-
-			let name = user_data.first_name ? user_data.first_name : '';
-			let last_name = user_data.last_name ? user_data.last_name : '';
-			
-			if (user.length > 0){
-				console.log('ya existe, actualizando');
-				sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
-			}else {
-				console.log('a este tipo no lo he visto ni en pelea de perros, será agregado');
-				sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;				
-			}
-
-			conf.MYSQL.query(sqlQuery, function (err, result) {
-				console.log(`la suscripcion del usuario ${name} ${last_name} ha sido actualizada a ${suscripcion}`);
-				sendTextMessage(user_psid, '¡Ya estás suscrito!');
-				sendTextMessage(user_psid, 'Te enviaremos una alerta cuando ocurra algo importante 🙂');
-			});
-
-		});
-	})
-	
-}
-function unsubscribeUser(user_psid) {
-
-	let select = `SELECT psid FROM bot_users WHERE psid = ${user_psid}`;
-	let sqlQuery = '';
+	let novo = true;
 
 	conf.MYSQL.query(select, function (err, result, fields){
 		if (err) throw err;
 		if (result.length > 0){
-			console.log('ya existe, desuscribiendo');
-			sqlQuery = `UPDATE bot_users SET subscription_type = 'disabled' WHERE psid = '${user_psid}'`;
-			conf.MYSQL.query(sqlQuery, function (err, result){
-				if (err) throw err;
-				console.log('1 usuario eliminado');
-				sendTextMessage(user_psid, '¡Lástima! Ya no recibirás más noticias. Pero si cambias de opinión, sólo escribe "Alertas".');
-			});
-
+			console.log('ya existe, actualizando');
+			novo = false;			
 		}else {
-			console.log('a este tipo no lo he visto ni en pelea de perros, será ignorado');
-			sendTextMessage(user_psid, 'Ya no estás suscrito');
-		}		
+			console.log('a este weon no lo he visto ni en pelea de perros, será agregado');
+			novo = true;
+		}
+
+		request({
+			"uri": "https://graph.facebook.com/" + user_psid,
+			"method": "GET",
+			"qs": {
+				"fields": "first_name,last_name,profile_pic",
+				"access_token": conf.PROFILE_TOKEN
+			},
+			"json" : true
+		}, (err, res, body) => {
+			if (!err && res.statusCode == 200) {
+				let name = body.first_name ? body.first_name : '';
+				let last_name = body.last_name ? body.last_name : '';
+
+				if (novo) {
+					sqlQuery = `INSERT INTO bot_users (psid, name, last_name, subscription_type) VALUES( '${user_psid}', '${name}', '${last_name}', '${suscripcion}')`;
+				}else {
+					sqlQuery = `UPDATE bot_users SET name = '${name}', last_name = '${last_name}', subscription_type = '${suscripcion}' WHERE psid = '${user_psid}'`;
+				}
+
+				conf.MYSQL.query(sqlQuery, function (err, result){
+					if (err) throw err;
+					console.log('1 fila insertada');
+					if (novo) {sendCategoriasMessage(user_psid);}
+					else {sendTextMessage(user_psid, 'Tu subscripcion ha sido actualizada!')}
+				});
+				
+			}else {
+				return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
+			}
+		});
+		
 	});	
 }
 
@@ -476,6 +357,25 @@ function subscribeToCategory(user_psid, categoria) {
 	});
 }
 
+function getUserData(user_psid) {
+	request({
+		"uri": "https://graph.facebook.com/" + user_psid,
+		"method": "GET",
+		"qs": {
+			"fields": "first_name,last_name,profile_pic",
+			"access_token": conf.PROFILE_TOKEN
+		},
+		"json" : true
+	}, (err, res, body) => {
+		if (!err && res.statusCode == 200) {
+			
+			let last_name = user.last_name ? user.last_name : '';
+		}else {
+			return console.error("No hubo comunicación", res.statusCode, res.statusMessage, body.error);
+		}
+	});
+}
+
 function sendTextMessage(user_psid, response) {
 	let message = '';
 
@@ -494,84 +394,38 @@ function sendTextMessage(user_psid, response) {
 }
 
 function sendNewsMessage(user_psid, nota) {
-	let message;
 
-	if (Array.isArray(user_psid)) {
-		
-		
-		for (let user of user_psid) {
+	let texto = nota.description == '' ? nota.title : nota.description;
 
-			if (nota.description != '') {
-				sendTextMessage(user.psid, nota.description);
-			}
-
-			message = {
-				"attachment": {
-					"type": "template",
-					"payload": {
-						"template_type": "generic",
-						"elements": [
-							{
-								"title": nota.title,
-								"image_url": nota.image,
-								"subtitle": nota.excerpt,
-								"default_action": {
-									"type": "web_url",
-									"url": nota.link,
-									"messenger_extensions": false,
-									"webview_height_ratio": "tall"
-								}
-							}
-						]
+	let message = {
+		"attachment": {
+			"type": "template",
+			"payload": {
+				"template_type": "generic",
+				"elements": [
+					{
+						"title": nota.title,
+						"image_url": nota.image,
+						"subtitle": texto,
+						"default_action": {
+							"type": "web_url",
+							"url": nota.link,
+							"messenger_extensions": false,
+							"webview_height_ratio": "tall"
+						}
 					}
-				}
-			};
-
-			let request_body = {
-				"recipient": {
-					"id": user.psid
-				},
-				"message": message
-			};
-			callSendApi(request_body);
-		}
-		
-	}else if (Array.isArray(nota)){
-		let notas = [];		
-
-		for (let post of nota) {			
-			notas.push({
-				"title": post.post_title,
-				"image_url": `https://media.biobiochile.cl/wp-content/uploads/${post.post_image.URL}`,
-				"subtitle": post.post_excerpt,
-				"default_action": {
-					"type": "web_url",
-					"url": post.post_URL,
-					"messenger_extensions": false,
-					"webview_height_ratio": "tall"
-				}
-			});
-		}
-
-
-		message = {
-			"attachment": {
-				"type": "template",
-				"payload": {
-					"template_type": "generic",
-					"elements": notas
-				}
+				]
 			}
-		};
+		}
+	};
 
-		let request_body = {
-			"recipient": {
-				"id": user_psid
-			},
-			"message": message
-		};
-		callSendApi(request_body);
-	}	
+	let request_body = {
+		"recipient": {
+			"id": user_psid
+		},
+		"message": message
+	};
+	callSendApi(request_body);
 }
 
 function sendCategoriasMessage(user_psid, response) {
@@ -684,55 +538,31 @@ function sendCategoriasMessage(user_psid, response) {
 	callSendApi(request_body);
 }
 
-function sendImageMessage(user_psid) {
-	let message = '';
-
-	message = {		
-		"attachment": {
-			"type": "image",
-			"payload": {
-				"attachment_id": conf.IMG_GETSTARTED,				
-			}
-		}
-	};
-
-	let request_body = {
-		"recipient": {
-			"id": user_psid
-		},
-		"message": message
-	};
-	callSendApi(request_body);
-}
-
 function sendGetStarted(user_psid, response) {
-	let message = '';	
+	let message = '';
 		
 	message = {
 		"attachment": {
 			"type": "template",
 			"payload": {
-				"template_type": "generic",
-				"elements": [
-					{	
-						"title": response,
-						"buttons": [/*{
-							"type": "postback",
-							"title": "Recibir a diario",
-							"payload": "daily"
-						},*/
-						{
-							"type": "postback",
-							"title": "Recibir",
-							"payload": "realtime"
-						},
-						{
-							"type": "postback",
-							"title": "No recibir",
-							"payload": "nope"
-						}]
-					}
-				]				
+				"template_type": "button",
+				"text": response,
+
+				"buttons": [{
+					"type": "postback",
+					"title": "Recibir a diario",
+					"payload": "daily"
+				},
+				{
+					"type": "postback",
+					"title": "Recibir al publicar ",
+					"payload": "realtime"
+				},
+				{
+					"type": "postback",
+					"title": "No recibir",
+					"payload": "nope"
+				}]
 			}
 		}
 	};
