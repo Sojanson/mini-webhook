@@ -22,7 +22,7 @@ let allowedCategories = [
 
 let conf = module.exports = {
 	MYSQL: con,
-	BBCL_CATEGORIES_URL: 'http://prensa.radiobiobio.cl/wp-content/plugins/bbcl/components/Categorias/static/categories.json',
+	BBCL_CATEGORIES_URL: 'http://sub.dominio.cod/categories.json',
     FB_MESSAGE_URL: 'https://graph.facebook.com/v2.6/me/messages',
     CATEGORIES: allowedCategories,
     VERIFY_TOKEN: 'dc90fb411580163dba492968d4991099',
